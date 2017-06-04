@@ -26,6 +26,12 @@ main()
 {
     p(type_for_each_t<mylist, constify_t>());
     p(value_for_each<mylist, sizefunc>::type());
+    p(type_at_index_t<mylist, 0>());
+    p(type_at_index_t<mylist, 1>());
+    p(type_at_index_t<mylist, 2>());
+
+
+    std::cout << size<mylist>::value << '\n';
 
     for(auto i : value_for_each<mylist, sizefunc>::value)
     {

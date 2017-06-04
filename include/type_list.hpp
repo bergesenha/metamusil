@@ -155,5 +155,23 @@ struct type_at_index<TypeList, 0>
 
 template <class TypeList, std::size_t Index>
 using type_at_index_t = typename type_at_index<TypeList, Index>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// return index of first type encountered that matches T
+template <class TypeList, class T, std::size_t Index = 0>
+struct index_of_type;
+
+template <class First, class... Rest, class T, std::size_t Index>
+struct index_of_type<type_list<First, Rest...>, T, Index>
+    : index_of_type<type_list<Rest...>, T, Index + 1>
+{
+};
+
+template <class... Rest, class T, std::size_t Index>
+struct index_of_type<type_list<T, Rest...>, T, Index>
+{
+    static const std::size_t value = Index;
+};
 }
 }
