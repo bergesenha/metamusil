@@ -125,5 +125,17 @@ struct value_for_each<type_list<Types...>, TypeMetaFunction>
 template <class... Types, template <class> class TypeMetaFunction>
 constexpr typename value_for_each<type_list<Types...>, TypeMetaFunction>::type
     value_for_each<type_list<Types...>, TypeMetaFunction>::value[];
+
+
+////////////////////////////////////////////////////////////////////////////////
+template <class TypeList>
+struct size;
+
+template <class... Types>
+struct size<type_list<Types...>>
+{
+    static const std::size_t value = sizeof...(Types);
+};
+
 }
 }
