@@ -75,5 +75,20 @@ struct reverse<type_list<>, TypeListOut>
 
 template <class TypeList>
 using reverse_t = typename reverse<TypeList, type_list<>>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// concatenate two type_lists
+template <class TypeList1, class TypeList2>
+struct concat;
+
+template <class... Types1, class... Types2>
+struct concat<type_list<Types1...>, type_list<Types2...>>
+{
+    typedef type_list<Types1..., Types2...> type;
+};
+
+template <class TypeList1, class TypeList2>
+using concat_t = typename concat<TypeList1, TypeList2>::type;
 }
 }
