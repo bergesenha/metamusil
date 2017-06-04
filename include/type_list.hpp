@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 
 
 namespace metamusil
@@ -137,5 +138,22 @@ struct size<type_list<Types...>>
     static const std::size_t value = sizeof...(Types);
 };
 
+
+////////////////////////////////////////////////////////////////////////////////
+template <class TypeList, std::size_t Index>
+struct type_at_index : type_at_index<tail_t<TypeList>, Index - 1>
+{
+    static_assert(size<TypeList>::value > Index, "out of bounds access");
+};
+
+template <class TypeList>
+struct type_at_index<TypeList, 0>
+{
+    typedef head_t<TypeList> type;
+};
+
+
+template <class TypeList, std::size_t Index>
+using type_at_index_t = typename type_at_index<TypeList, Index>::type;
 }
 }
