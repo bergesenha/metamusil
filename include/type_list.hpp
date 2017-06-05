@@ -73,6 +73,27 @@ using append_t = typename append<TypeList, T>::type;
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// append a type to the back of a type_list if the type satisfies UnaryPredicate
+template <class TypeList,
+          class T,
+          template <class> class UnaryPredicate,
+          bool Satisfies = UnaryPredicate<T>::value>
+struct append_if
+{
+    typedef TypeList type;
+};
+
+template <class TypeList, class T, template <class> class UnaryPredicate>
+struct append_if<TypeList, T, UnaryPredicate, true>
+{
+    typedef append_t<TypeList, T> type;
+};
+
+template <class TypeList, class T, template <class> class UnaryPredicate>
+using append_if_t = typename append_if<TypeList, T, UnaryPredicate>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
 // reverse a type_list
 template <class TypeList, class TypeListOut>
 struct reverse;
