@@ -133,35 +133,35 @@ using concat_t = typename concat<TypeList1, TypeList2>::type;
 // apply TypeMetaFunction to each type in TypeList and return type_list of the
 // resulting types, where TypeMetaFunction is a type alias.
 template <class TypeList, template <class> class TypeMetaFunction>
-struct type_for_each;
+struct type_transform;
 
 template <class... Types, template <class> class TypeMetaFunction>
-struct type_for_each<type_list<Types...>, TypeMetaFunction>
+struct type_transform<type_list<Types...>, TypeMetaFunction>
 {
     typedef type_list<TypeMetaFunction<Types>...> type;
 };
 
 template <class TypeList, template <class> class TypeMetaFunction>
-using type_for_each_t =
-    typename type_for_each<TypeList, TypeMetaFunction>::type;
+using type_transform_t =
+    typename type_transform<TypeList, TypeMetaFunction>::type;
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // apply TypeMetaFunction to each type in TypeList and return array of the
 // result of TypeMetaFunction on each type in TypeList.
 template <class TypeList, template <class> class TypeMetaFunction>
-struct value_for_each;
+struct value_transform;
 
 template <class... Types, template <class> class TypeMetaFunction>
-struct value_for_each<type_list<Types...>, TypeMetaFunction>
+struct value_transform<type_list<Types...>, TypeMetaFunction>
 {
     typedef decltype(TypeMetaFunction<head_t<type_list<Types...>>>::value) type;
     static constexpr type value[] = {TypeMetaFunction<Types>::value...};
 };
 
 template <class... Types, template <class> class TypeMetaFunction>
-constexpr typename value_for_each<type_list<Types...>, TypeMetaFunction>::type
-    value_for_each<type_list<Types...>, TypeMetaFunction>::value[];
+constexpr typename value_transform<type_list<Types...>, TypeMetaFunction>::type
+    value_transform<type_list<Types...>, TypeMetaFunction>::value[];
 
 
 ////////////////////////////////////////////////////////////////////////////////
