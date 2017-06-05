@@ -212,7 +212,8 @@ struct index_of_type<type_list<T, Rest...>, T, Index>
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//
+// returns type list exluding types that don't satisfy UnaryPredicate, ie for a
+// type T UnaryPredicate<T>::value == false.
 template <class TypeList,
           template <class> class UnaryPredicate,
           class Accum = type_list<>>
