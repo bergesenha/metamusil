@@ -58,6 +58,21 @@ using prepend_t = typename prepend<TypeList, T>::type;
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// append a type to the back of a type_list
+template <class TypeList, class T>
+struct append;
+
+template <class... Types, class T>
+struct append<type_list<Types...>, T>
+{
+    typedef type_list<Types..., T> type;
+};
+
+template <class TypeList, class T>
+using append_t = typename append<TypeList, T>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
 // reverse a type_list
 template <class TypeList, class TypeListOut>
 struct reverse;
