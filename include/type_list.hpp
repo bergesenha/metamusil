@@ -209,5 +209,26 @@ struct index_of_type<type_list<T, Rest...>, T, Index>
 {
     static const std::size_t value = Index;
 };
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+template <class TypeList,
+          template <class> class UnaryPredicate,
+          class Accum = type_list<>>
+struct filter : filter<tail_t<TypeList>,
+                       UnaryPredicate,
+                       append_if_t<Accum, head_t<TypeList>, UnaryPredicate>>
+{
+};
+
+template <template <class> class UnaryPredicate, class Accum>
+struct filter<type_list<>, UnaryPredicate, Accum>
+{
+    typedef Accum type;
+};
+
+template <class TypeList, template <class> class UnaryPredicate>
+using filter_t = typename filter<TypeList, UnaryPredicate>::type;
 }
 }
