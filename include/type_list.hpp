@@ -166,10 +166,10 @@ constexpr typename value_transform<type_list<Types...>, TypeMetaFunction>::type
 
 ////////////////////////////////////////////////////////////////////////////////
 template <class TypeList>
-struct size;
+struct length;
 
 template <class... Types>
-struct size<type_list<Types...>>
+struct length<type_list<Types...>>
 {
     static const std::size_t value = sizeof...(Types);
 };
@@ -179,7 +179,7 @@ struct size<type_list<Types...>>
 template <class TypeList, std::size_t Index>
 struct type_at_index : type_at_index<tail_t<TypeList>, Index - 1>
 {
-    static_assert(size<TypeList>::value > Index, "out of bounds access");
+    static_assert(length<TypeList>::value > Index, "out of bounds access");
 };
 
 template <class TypeList>
