@@ -268,5 +268,20 @@ struct order<type_list<Types...>, TypeListReference>
 
 template <class TypeList, class TypeListReference>
 using order_t = typename order<TypeList, TypeListReference>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// convert type_list into index sequence of same length
+template <class TypeList>
+struct index_sequence_for;
+
+template <class... Types>
+struct index_sequence_for<type_list<Types...>>
+{
+    typedef std::index_sequence_for<Types...> type;
+};
+
+template <class TypeList>
+using index_sequence_for_t = typename index_sequence_for<TypeList>::type;
 }
 }
