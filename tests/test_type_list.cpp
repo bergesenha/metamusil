@@ -73,3 +73,26 @@ TEST_CASE("test prepend and append metafunctions", "[type_list]")
         REQUIRE(same == true);
     }
 }
+
+
+TEST_CASE("test append_if metafunction", "[type_list]")
+{
+    SECTION("successfully append float")
+    {
+        typedef append_if_t<type_list<>, float, std::is_floating_point>
+            floatlist;
+
+        auto same = std::is_same<head_t<floatlist>, float>::value;
+
+        REQUIRE(same == true);
+    }
+
+    SECTION("unsuccessfully append float")
+    {
+        typedef append_if_t<type_list<>, float, std::is_integral> empty_list;
+
+        auto same = std::is_same<empty_list, type_list<>>::value;
+
+        REQUIRE(same == true);
+    }
+}
