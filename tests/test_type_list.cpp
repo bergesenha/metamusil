@@ -12,6 +12,12 @@ typedef type_list<int, char, double, long> mylist;
 template <class T>
 using constify = const T;
 
+template <class T>
+struct get_size
+{
+    static const std::size_t value = sizeof(T);
+};
+
 TEST_CASE("test head and tail metafunctions", "[type_list]")
 {
 
@@ -52,7 +58,7 @@ TEST_CASE("test prepend and append metafunctions", "[type_list]")
     SECTION("append a float")
     {
         typedef append_t<mylist, float> mylist2;
-        constexpr std::size_t sizeoflist = size<mylist>::value;
+        constexpr std::size_t sizeoflist = length<mylist>::value;
 
         auto same =
             std::is_same<float, type_at_index_t<mylist2, sizeoflist>>::value;
@@ -207,4 +213,45 @@ TEST_CASE("test type type_transform metafunction", "[type_list]")
 
         REQUIRE(same == true);
     }
+}
+
+
+TEST_CASE("test value_transform metafunction", "[type_list]")
+{
+    SECTION("generate array of sizes of type in list")
+    {
+        auto& array_ref = value_transform<mylist, get_size>::value;
+
+        const auto length = std::extent<decltype(
+            value_transform<mylist, get_size>::value)>::value;
+
+        REQUIRE(length == 4);
+        REQUIRE(array_ref[0] == sizeof(int));
+        REQUIRE(array_ref[1] == sizeof(char));
+        REQUIRE(array_ref[2] == sizeof(double));
+        REQUIRE(array_ref[3] == sizeof(long));
+    }
+
+    SECTION("value_transform on list of one type")
+    {
+        auto& array_ref = value_transform<type_list<int>, get_size>::value;
+
+        const auto length = std::extent<decltype(
+            value_transform<type_list<int>, get_size>::value)>::value;
+
+        REQUIRE(length == 1);
+        REQUIRE(array_ref[0] == sizeof(int));
+    }
+}
+
+
+TEST_CASE("test length metafunction", "[type_list]")
+{
+    auto length0 = length<mylist>::value;
+    auto length1 = length<type_list<int>>::value;
+    auto length2 = length<type_list<>>::value;
+
+    REQUIRE(length0 == 4);
+    REQUIRE(length1 == 1);
+    REQUIRE(length2 == 0);
 }
