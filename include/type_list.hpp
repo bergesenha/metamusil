@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <type_traits>
 
 
 namespace metamusil
@@ -165,6 +166,7 @@ constexpr typename value_transform<type_list<Types...>, TypeMetaFunction>::type
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// returns length of a type_list
 template <class TypeList>
 struct length;
 
@@ -176,6 +178,7 @@ struct length<type_list<Types...>>
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// returns type at index in a type_list
 template <class TypeList, std::size_t Index>
 struct type_at_index : type_at_index<tail_t<TypeList>, Index - 1>
 {
