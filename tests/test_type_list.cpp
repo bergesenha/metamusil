@@ -1,5 +1,7 @@
 #include "catch.hpp"
 
+#include <type_traits>
+
 #include <type_list.hpp>
 
 
@@ -92,6 +94,38 @@ TEST_CASE("test append_if metafunction", "[type_list]")
         typedef append_if_t<type_list<>, float, std::is_integral> empty_list;
 
         auto same = std::is_same<empty_list, type_list<>>::value;
+
+        REQUIRE(same == true);
+    }
+}
+
+
+TEST_CASE("test reverse metafunction", "[type_list]")
+{
+    SECTION("reverse mylist")
+    {
+        typedef reverse_t<mylist> reversed;
+
+        auto same =
+            std::is_same<reversed, type_list<long, double, char, int>>::value;
+
+        REQUIRE(same == true);
+    }
+
+    SECTION("reverse a type_list with one type")
+    {
+        typedef reverse_t<type_list<long>> reversed;
+
+        auto same = std::is_same<reversed, type_list<long>>::value;
+
+        REQUIRE(same == true);
+    }
+
+    SECTION("reverse an empty type_list")
+    {
+        typedef reverse_t<type_list<>> reversed;
+
+        auto same = std::is_same<reversed, type_list<>>::value;
 
         REQUIRE(same == true);
     }
