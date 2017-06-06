@@ -255,3 +255,44 @@ TEST_CASE("test length metafunction", "[type_list]")
     REQUIRE(length1 == 1);
     REQUIRE(length2 == 0);
 }
+
+
+TEST_CASE("test type_at_index", "[type_list]")
+{
+    typedef type_at_index_t<mylist, 0> type0;
+    typedef type_at_index_t<mylist, 1> type1;
+    typedef type_at_index_t<mylist, 2> type2;
+    typedef type_at_index_t<mylist, 3> type3;
+
+    auto same0 = std::is_same<type0, int>::value;
+    auto same1 = std::is_same<type1, char>::value;
+    auto same2 = std::is_same<type2, double>::value;
+    auto same3 = std::is_same<type3, long>::value;
+
+    REQUIRE(same0 == true);
+    REQUIRE(same1 == true);
+    REQUIRE(same2 == true);
+    REQUIRE(same3 == true);
+}
+
+TEST_CASE("test index_of_type", "[type_list]")
+{
+    auto index0 = index_of_type<mylist, int>::value;
+    auto index1 = index_of_type<mylist, char>::value;
+    auto index2 = index_of_type<mylist, double>::value;
+    auto index3 = index_of_type<mylist, long>::value;
+
+    REQUIRE(index0 == 0);
+    REQUIRE(index1 == 1);
+    REQUIRE(index2 == 2);
+    REQUIRE(index3 == 3);
+
+    SECTION("should get index of first type matching")
+    {
+        typedef append_t<mylist, char> mylist2;
+
+        auto charindex = index_of_type<mylist2, char>::value;
+
+        REQUIRE(charindex == 1);
+    }
+}
