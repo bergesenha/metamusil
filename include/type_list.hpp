@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <utility>
 
 
 namespace metamusil
@@ -165,6 +166,7 @@ constexpr typename value_transform<type_list<Types...>, TypeMetaFunction>::type
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// returns length of a type_list
 template <class TypeList>
 struct length;
 
@@ -176,6 +178,7 @@ struct length<type_list<Types...>>
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// returns type at index in a type_list
 template <class TypeList, std::size_t Index>
 struct type_at_index : type_at_index<tail_t<TypeList>, Index - 1>
 {
@@ -231,5 +234,39 @@ struct filter<type_list<>, UnaryPredicate, Accum>
 
 template <class TypeList, template <class> class UnaryPredicate>
 using filter_t = typename filter<TypeList, UnaryPredicate>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// returns type list elements reordered according to given index
+// sequence
+template <class TypeList, class IndexSequence>
+struct reorder;
+
+template <class TypeList, std::size_t... Indices>
+struct reorder<TypeList, std::index_sequence<Indices...>>
+{
+    typedef type_list<type_at_index_t<TypeList, Indices>...> type;
+};
+
+template <class TypeList, class IndexSequence>
+using reorder_t = typename reorder<TypeList, IndexSequence>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// returns index_sequence of order of TypeList1 according to TypeList2
+
+template <class TypeList, class TypeListReference>
+struct order;
+
+template <class... Types, class TypeListReference>
+struct order<type_list<Types...>, TypeListReference>
+{
+    typedef std::index_sequence<
+        index_of_type<TypeListReference, Types>::value...>
+        type;
+};
+
+template <class TypeList, class TypeListReference>
+using order_t = typename order<TypeList, TypeListReference>::type;
 }
 }
