@@ -1,6 +1,6 @@
 #pragma once
 #include <cstddef>
-#include <type_traits>
+#include <utility>
 
 
 namespace metamusil
@@ -234,5 +234,21 @@ struct filter<type_list<>, UnaryPredicate, Accum>
 
 template <class TypeList, template <class> class UnaryPredicate>
 using filter_t = typename filter<TypeList, UnaryPredicate>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// returns type list of same elements reordered according to given index
+// sequence
+template <class TypeList, class IndexSequence>
+struct reorder;
+
+template <class TypeList, std::size_t... Indices>
+struct reorder<TypeList, std::index_sequence<Indices...>>
+{
+    typedef type_list<type_at_index_t<TypeList, Indices>...> type;
+};
+
+template <class TypeList, class IndexSequence>
+using reorder_t = typename reorder<TypeList, IndexSequence>::type;
 }
 }

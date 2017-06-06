@@ -335,3 +335,31 @@ TEST_CASE("test filter metaalgorithm", "[type_list]")
         REQUIRE(same == true);
     }
 }
+
+
+TEST_CASE("test reorder metaalgorithm", "[type_list]")
+{
+    SECTION("reorder all elements in type_list")
+    {
+        typedef std::index_sequence<2, 1, 3, 0> the_order;
+
+        typedef reorder_t<mylist, the_order> reordered;
+
+        auto same =
+            std::is_same<reordered, type_list<double, char, long, int>>::value;
+
+        REQUIRE(same);
+    }
+
+    SECTION("reorder subset of elements in type_list")
+    {
+        typedef std::index_sequence<2, 1, 3> the_order;
+
+        typedef reorder_t<mylist, the_order> reordered;
+
+        auto same =
+            std::is_same<reordered, type_list<double, char, long>>::value;
+
+        REQUIRE(same);
+    }
+}
