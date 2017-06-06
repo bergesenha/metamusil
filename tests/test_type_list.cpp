@@ -296,3 +296,42 @@ TEST_CASE("test index_of_type", "[type_list]")
         REQUIRE(charindex == 1);
     }
 }
+
+TEST_CASE("test filter metaalgorithm", "[type_list]")
+{
+    SECTION("filter for floats")
+    {
+        typedef filter_t<mylist, std::is_floating_point> only_floats;
+
+        auto length1 = length<only_floats>::value;
+
+        auto same = std::is_same<only_floats, type_list<double>>::value;
+
+        REQUIRE(length1 == 1);
+        REQUIRE(same == true);
+    }
+
+    SECTION("filter for integrals")
+    {
+        typedef filter_t<mylist, std::is_integral> only_integrals;
+
+        auto length1 = length<only_integrals>::value;
+
+        auto same =
+            std::is_same<only_integrals, type_list<int, char, long>>::value;
+
+        REQUIRE(length1 == 3);
+        REQUIRE(same == true);
+    }
+
+    SECTION("filter on empty list")
+    {
+        typedef filter_t<type_list<>, std::is_signed> empty;
+
+        auto length1 = length<empty>::value;
+        auto same = std::is_same<empty, type_list<>>::value;
+
+        REQUIRE(length1 == 0);
+        REQUIRE(same == true);
+    }
+}
