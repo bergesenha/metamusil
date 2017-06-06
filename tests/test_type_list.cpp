@@ -9,6 +9,9 @@ using namespace metamusil::t_list;
 
 typedef type_list<int, char, double, long> mylist;
 
+template <class T>
+using constify = const T;
+
 TEST_CASE("test head and tail metafunctions", "[type_list]")
 {
 
@@ -168,6 +171,39 @@ TEST_CASE("test concat metafunction", "[type_list]")
         typedef concat_t<type_list<>, mylist> concatenated;
 
         auto same = std::is_same<concatenated, mylist>::value;
+
+        REQUIRE(same == true);
+    }
+}
+
+
+TEST_CASE("test type type_transform metafunction", "[type_list]")
+{
+    SECTION("constify mylist")
+    {
+        typedef type_transform_t<mylist, constify> constlist;
+
+        auto same = std::is_same<
+            constlist,
+            type_list<const int, const char, const double, const long>>::value;
+
+        REQUIRE(same == true);
+    }
+
+    SECTION("constify empty list")
+    {
+        typedef type_transform_t<type_list<>, constify> constlist;
+
+        auto same = std::is_same<constlist, type_list<>>::value;
+
+        REQUIRE(same == true);
+    }
+
+    SECTION("constify list of one element")
+    {
+        typedef type_transform_t<type_list<int>, constify> constlist;
+
+        auto same = std::is_same<constlist, type_list<const int>>::value;
 
         REQUIRE(same == true);
     }
