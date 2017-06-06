@@ -237,7 +237,7 @@ using filter_t = typename filter<TypeList, UnaryPredicate>::type;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// returns type list of same elements reordered according to given index
+// returns type list elements reordered according to given index
 // sequence
 template <class TypeList, class IndexSequence>
 struct reorder;
@@ -250,5 +250,23 @@ struct reorder<TypeList, std::index_sequence<Indices...>>
 
 template <class TypeList, class IndexSequence>
 using reorder_t = typename reorder<TypeList, IndexSequence>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// returns index_sequence of order of TypeList1 according to TypeList2
+
+template <class TypeList, class TypeListReference>
+struct order;
+
+template <class... Types, class TypeListReference>
+struct order<type_list<Types...>, TypeListReference>
+{
+    typedef std::index_sequence<
+        index_of_type<TypeListReference, Types>::value...>
+        type;
+};
+
+template <class TypeList, class TypeListReference>
+using order_t = typename order<TypeList, TypeListReference>::type;
 }
 }
