@@ -130,3 +130,45 @@ TEST_CASE("test reverse metafunction", "[type_list]")
         REQUIRE(same == true);
     }
 }
+
+
+TEST_CASE("test concat metafunction", "[type_list]")
+{
+    SECTION("concat two type_lists")
+    {
+        typedef concat_t<mylist, type_list<float, int*>> concatenated;
+
+        auto same = std::is_same<
+            concatenated,
+            type_list<int, char, double, long, float, int*>>::value;
+
+        REQUIRE(same == true);
+    }
+
+    SECTION("concat two empty type_lists")
+    {
+        typedef concat_t<type_list<>, type_list<>> concatenated;
+
+        auto same = std::is_same<concatenated, type_list<>>::value;
+
+        REQUIRE(same == true);
+    }
+
+    SECTION("concat with empty list")
+    {
+        typedef concat_t<mylist, type_list<>> concatenated;
+
+        auto same = std::is_same<concatenated, mylist>::value;
+
+        REQUIRE(same == true);
+    }
+
+    SECTION("concat empty list with mylist")
+    {
+        typedef concat_t<type_list<>, mylist> concatenated;
+
+        auto same = std::is_same<concatenated, mylist>::value;
+
+        REQUIRE(same == true);
+    }
+}
