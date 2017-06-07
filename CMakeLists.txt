@@ -18,6 +18,7 @@ if(METAMUSIL_BUILD_TESTS)
     set(METAMUSIL_TEST_SRC
         tests/test_main.cpp
         tests/test_type_list.cpp
+        tests/test_function_deduction.cpp
         )
     add_executable(unit_tests ${METAMUSIL_TEST_SRC})
     target_include_directories(unit_tests
