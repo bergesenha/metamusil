@@ -175,3 +175,45 @@ TEST_CASE("test parameter type deduction for member functions",
                      t_list::type_list<const char*, long long>>::value;
     REQUIRE(csame5);
 }
+
+
+TEST_CASE("test deduce_object_type for member functions",
+          "[deduce_object_type]")
+{
+    typedef deduce_object_type_t<decltype(&class1::mfunc1)> object_type1;
+    typedef deduce_object_type_t<decltype(&class1::mfunc2)> object_type2;
+    typedef deduce_object_type_t<decltype(&class1::mfunc3)> object_type3;
+    typedef deduce_object_type_t<decltype(&class1::mfunc4)> object_type4;
+    typedef deduce_object_type_t<decltype(&class1::mfunc5)> object_type5;
+
+    auto same1 = std::is_same<object_type1, class1>::value;
+    auto same2 = std::is_same<object_type2, class1>::value;
+    auto same3 = std::is_same<object_type3, class1>::value;
+    auto same4 = std::is_same<object_type4, class1>::value;
+    auto same5 = std::is_same<object_type5, class1>::value;
+
+    REQUIRE(same1);
+    REQUIRE(same2);
+    REQUIRE(same3);
+    REQUIRE(same4);
+    REQUIRE(same5);
+
+
+    typedef deduce_object_type_t<decltype(&class1::cmfunc1)> object_type1;
+    typedef deduce_object_type_t<decltype(&class1::cmfunc2)> object_type2;
+    typedef deduce_object_type_t<decltype(&class1::cmfunc3)> object_type3;
+    typedef deduce_object_type_t<decltype(&class1::cmfunc4)> object_type4;
+    typedef deduce_object_type_t<decltype(&class1::cmfunc5)> object_type5;
+
+    auto csame1 = std::is_same<object_type1, class1>::value;
+    auto csame2 = std::is_same<object_type2, class1>::value;
+    auto csame3 = std::is_same<object_type3, class1>::value;
+    auto csame4 = std::is_same<object_type4, class1>::value;
+    auto csame5 = std::is_same<object_type5, class1>::value;
+
+    REQUIRE(csame1);
+    REQUIRE(csame2);
+    REQUIRE(csame3);
+    REQUIRE(csame4);
+    REQUIRE(csame5);
+}
