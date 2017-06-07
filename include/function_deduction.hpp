@@ -35,6 +35,7 @@ template <class FunctionType>
 using deduce_return_type_t = typename deduce_return_type<FunctionType>::type;
 
 
+////////////////////////////////////////////////////////////////////////////////
 template <class FunctionType>
 struct deduce_parameter_types;
 

@@ -106,3 +106,27 @@ TEST_CASE("test return type deduction for member functions",
     auto csame5 = std::is_same<cret_type5, const char*>::value;
     REQUIRE(csame5);
 }
+
+
+TEST_CASE("test parameter type deduction for free functions",
+          "[deduce_parameter_types]")
+{
+    typedef deduce_parameter_types_t<decltype(func1)> param_list1;
+    typedef deduce_parameter_types_t<decltype(func2)> param_list2;
+    typedef deduce_parameter_types_t<decltype(func3)> param_list3;
+    typedef deduce_parameter_types_t<decltype(func4)> param_list4;
+    typedef deduce_parameter_types_t<decltype(func5)> param_list5;
+
+    auto same1 = std::is_same<param_list1, t_list::type_list<>>::value;
+    REQUIRE(same1);
+    auto same2 = std::is_same<param_list2, t_list::type_list<>>::value;
+    REQUIRE(same2);
+    auto same3 = std::is_same<param_list3, t_list::type_list<double>>::value;
+    REQUIRE(same3);
+    auto same4 =
+        std::is_same<param_list4, t_list::type_list<double, char>>::value;
+    REQUIRE(same4);
+    auto same5 = std::is_same<param_list5,
+                              t_list::type_list<const char*, long long>>::value;
+    REQUIRE(same5);
+}
