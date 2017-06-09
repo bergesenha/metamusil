@@ -37,17 +37,18 @@ using tail_t = typename tail<IntSeq>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
 // append an integer to the end of a std::integer_sequence
-template <class IntSeq, typename IntSeq::value_type Num>
+template <class IntType, class IntSeq, IntType Num>
 struct append;
 
 template <class IntType, IntType... Nums, IntType Num>
-struct append<std::integer_sequence<IntType, Nums...>, Num>
+struct append<IntType, std::integer_sequence<IntType, Nums...>, Num>
 {
     typedef std::integer_sequence<IntType, Nums..., Num> type;
 };
 
 template <class IntSeq, typename IntSeq::value_type Num>
-using append_t = typename append<IntSeq, Num>::type;
+using append_t =
+    typename append<typename IntSeq::value_type, IntSeq, Num>::type;
 
 
 ////////////////////////////////////////////////////////////////////////////////
