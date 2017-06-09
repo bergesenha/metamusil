@@ -21,6 +21,7 @@ if(METAMUSIL_BUILD_TESTS)
         tests/test_function_deduction.cpp
         tests/test_member_variable_deduction.cpp
         tests/test_sfinae.cpp
+        tests/test_integer_sequence.cpp
         )
     add_executable(unit_tests ${METAMUSIL_TEST_SRC})
     target_include_directories(unit_tests
