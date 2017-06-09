@@ -101,6 +101,9 @@ using integer_sequence_from_range_t =
     typename integer_sequence_from_range<IntType, Begin, End>::type;
 
 
+////////////////////////////////////////////////////////////////////////////////
+// return std::integer_sequence of integers in IntSeq that satisfy
+// UnaryPredicate, ie UnaryPredicate<Num>::value == true
 template <class IntSeq,
           template <typename IntSeq::value_type> class UnaryPredicate,
           class Accum = std::integer_sequence<typename IntSeq::value_type>>
