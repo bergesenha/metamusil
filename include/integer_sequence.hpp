@@ -7,8 +7,8 @@ namespace metamusil
 {
 namespace int_seq
 {
-
-
+////////////////////////////////////////////////////////////////////////////////
+// append an integer to the end of a std::integer_sequence
 template <class IntSeq, typename IntSeq::value_type Num>
 struct append;
 
@@ -22,6 +22,8 @@ template <class IntSeq, typename IntSeq::value_type Num>
 using append_t = typename append<IntSeq, Num>::type;
 
 
+////////////////////////////////////////////////////////////////////////////////
+// generate an integer sequence from a range [Begin, End)
 template <class IntType,
           IntType Begin,
           IntType End,

@@ -18,6 +18,19 @@ struct get_size
     static const std::size_t value = sizeof(T);
 };
 
+
+template <class T>
+struct test_template
+{
+};
+
+template <std::size_t N>
+struct static_square
+{
+    static const std::size_t value = N * N;
+};
+
+
 TEST_CASE("test head and tail metafunctions", "[type_list]")
 {
 
@@ -382,4 +395,38 @@ TEST_CASE("test reorder and order metaalgorithm", "[type_list]")
             REQUIRE(same_order);
         }
     }
+}
+
+TEST_CASE("test from_template_instantiations", "[from_template_instantiations]")
+{
+    typedef type_list<int, long, double, char> the_types;
+
+    typedef from_template_instantiations_t<test_template, the_types>
+        instantiations;
+
+    auto same = std::is_same<instantiations,
+                             type_list<test_template<int>,
+                                       test_template<long>,
+                                       test_template<double>,
+                                       test_template<char>>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test from_integer_template_instantiations",
+          "[from_integer_template_instantiations]")
+{
+    typedef std::make_index_sequence<3> the_sequence;
+
+    typedef from_integer_template_instantiations_t<std::size_t,
+                                                   static_square,
+                                                   the_sequence>
+        instantiations;
+
+    auto same = std::is_same<
+        instantiations,
+        type_list<static_square<0>, static_square<1>, static_square<2>>>::value;
+
+    REQUIRE(same);
 }
