@@ -286,7 +286,7 @@ using index_sequence_for_t = typename index_sequence_for<TypeList>::type;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// return a type_list consisitng of template instantiations of Template with the
+// return a type_list consisting of template instantiations of Template with the
 // types in TypeList
 template <template <class> class Template, class TypeList>
 struct from_template_instantiations;
@@ -300,5 +300,26 @@ struct from_template_instantiations<Template, type_list<Types...>>
 template <template <class> class Template, class TypeList>
 using from_template_instantiations_t =
     typename from_template_instantiations<Template, TypeList>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// return a type_list consisting of template instantiations of Template with the
+// integers in IntSeq
+template <class IntType, template <IntType> class Template, class IntSeq>
+struct from_integer_template_instantiations;
+
+template <class IntType, template <IntType> class Template, IntType... Seq>
+struct from_integer_template_instantiations<
+    IntType,
+    Template,
+    std::integer_sequence<IntType, Seq...>>
+{
+    typedef type_list<Template<Seq>...> type;
+};
+
+template <class IntType, template <IntType> class Template, class IntSeq>
+using from_integer_template_instantiations_t =
+    typename from_integer_template_instantiations<IntType, Template, IntSeq>::
+        type;
 }
 }
