@@ -18,6 +18,13 @@ struct get_size
     static const std::size_t value = sizeof(T);
 };
 
+
+template <class T>
+struct test_template
+{
+};
+
+
 TEST_CASE("test head and tail metafunctions", "[type_list]")
 {
 
@@ -382,4 +389,20 @@ TEST_CASE("test reorder and order metaalgorithm", "[type_list]")
             REQUIRE(same_order);
         }
     }
+}
+
+TEST_CASE("test from_template_instantiations", "[from_template_instantiations]")
+{
+    typedef type_list<int, long, double, char> the_types;
+
+    typedef from_template_instantiations_t<test_template, the_types>
+        instantiations;
+
+    auto same = std::is_same<instantiations,
+                             type_list<test_template<int>,
+                                       test_template<long>,
+                                       test_template<double>,
+                                       test_template<char>>>::value;
+
+    REQUIRE(same);
 }
