@@ -14,6 +14,12 @@ struct is4<4> : std::true_type
 {
 };
 
+template <std::size_t N>
+struct is_odd
+{
+    static const bool value = N % 2;
+};
+
 TEST_CASE("test int_seq::append", "[int_seq::append]")
 {
     typedef std::integer_sequence<long> empty_sequence;
@@ -103,4 +109,21 @@ TEST_CASE("test append_if on integer_sequence", "[append_if]")
 
         REQUIRE(same);
     }
+}
+
+
+TEST_CASE("test filter on integer_sequence", "[filter]")
+{
+    typedef std::make_index_sequence<6> start_sequence;
+
+    typedef metamusil::int_seq::filter_t<start_sequence, is_odd> result;
+
+    auto isodd = is_odd<1>::value;
+    auto isodd2 = is_odd<2>::value;
+
+    auto same = std::is_same<result, std::index_sequence<1, 3, 5>>::value;
+
+    REQUIRE(isodd);
+    REQUIRE(isodd2 == false);
+    REQUIRE(same);
 }

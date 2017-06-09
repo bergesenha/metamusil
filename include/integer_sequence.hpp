@@ -98,5 +98,25 @@ struct integer_sequence_from_range<IntType, End, End, Accum>
 template <class IntType, IntType Begin, IntType End>
 using integer_sequence_from_range_t =
     typename integer_sequence_from_range<IntType, Begin, End>::type;
+
+
+template <class IntSeq,
+          template <typename IntSeq::value_type> class UnaryPredicate,
+          class Accum = std::integer_sequence<typename IntSeq::value_type>>
+struct filter : filter<tail_t<IntSeq>,
+                       UnaryPredicate,
+                       append_if_t<Accum, head<IntSeq>::value, UnaryPredicate>>
+{
+};
+
+template <class IntType, template <IntType> class UnaryPredicate, class Accum>
+struct filter<std::integer_sequence<IntType>, UnaryPredicate, Accum>
+{
+    typedef Accum type;
+};
+
+template <class IntSeq,
+          template <typename IntSeq::value_type> class UnaryPredicate>
+using filter_t = typename filter<IntSeq, UnaryPredicate>::type;
 }
 }
