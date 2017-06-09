@@ -283,5 +283,19 @@ struct index_sequence_for<type_list<Types...>>
 
 template <class TypeList>
 using index_sequence_for_t = typename index_sequence_for<TypeList>::type;
+
+
+template <template <class> class Template, class TypeList>
+struct from_template_instantiations;
+
+template <template <class> class Template, class... Types>
+struct from_template_instantiations<Template, type_list<Types...>>
+{
+    typedef type_list<Template<Types>...> type;
+};
+
+template <template <class> class Template, class TypeList>
+using from_template_instantiations_t =
+    typename from_template_instantiations<Template, TypeList>::type;
 }
 }
