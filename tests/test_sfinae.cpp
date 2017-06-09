@@ -33,11 +33,11 @@ struct int_spec_mock<32>
 TEST_CASE("test specialization_exists", "[specialization_exists]")
 {
     const auto int_spec_exists =
-        metamusil::specialization_exists<spec_mock, int>::value;
+        metamusil::specialization_defined<spec_mock, int>::value;
     const auto double_spec_exists =
-        metamusil::specialization_exists<spec_mock, double>::value;
+        metamusil::specialization_defined<spec_mock, double>::value;
     const auto void_spec_exists =
-        metamusil::specialization_exists<spec_mock, void>::value;
+        metamusil::specialization_defined<spec_mock, void>::value;
 
     REQUIRE(int_spec_exists);
     REQUIRE(double_spec_exists == false);
@@ -48,12 +48,18 @@ TEST_CASE("test specialization_exists", "[specialization_exists]")
 TEST_CASE("test integral_specialization_exists",
           "[integral_specialization_exists]")
 {
-    const auto spec_10_exists = metamusil::
-        integral_specialization_exists<std::size_t, int_spec_mock, 10ll>::value;
-    const auto spec_20_exists = metamusil::
-        integral_specialization_exists<std::size_t, int_spec_mock, 20ll>::value;
-    const auto spec_32_exists = metamusil::
-        integral_specialization_exists<std::size_t, int_spec_mock, 32ll>::value;
+    const auto spec_10_exists =
+        metamusil::integral_specialization_defined<std::size_t,
+                                                   int_spec_mock,
+                                                   10ll>::value;
+    const auto spec_20_exists =
+        metamusil::integral_specialization_defined<std::size_t,
+                                                   int_spec_mock,
+                                                   20ll>::value;
+    const auto spec_32_exists =
+        metamusil::integral_specialization_defined<std::size_t,
+                                                   int_spec_mock,
+                                                   32ll>::value;
 
     REQUIRE(spec_10_exists);
     REQUIRE(spec_20_exists == false);
