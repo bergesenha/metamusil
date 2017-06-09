@@ -51,6 +51,31 @@ using append_t = typename append<IntSeq, Num>::type;
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// append an integer if it satisfies UnaryPredicate<IntType N>
+template <class IntSeq,
+          typename IntSeq::value_type N,
+          template <typename IntSeq::value_type> class UnaryPredicate,
+          bool Satisfies = UnaryPredicate<N>::value>
+struct append_if
+{
+    typedef IntSeq type;
+};
+
+template <class IntSeq,
+          typename IntSeq::value_type N,
+          template <typename IntSeq::value_type> class UnaryPredicate>
+struct append_if<IntSeq, N, UnaryPredicate, true>
+{
+    typedef append_t<IntSeq, N> type;
+};
+
+template <class IntSeq,
+          typename IntSeq::value_type N,
+          template <typename IntSeq::value_type> class UnaryPredicate>
+using append_if_t = typename append_if<IntSeq, N, UnaryPredicate>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
 // generate an integer sequence from a range [Begin, End)
 template <class IntType,
           IntType Begin,
