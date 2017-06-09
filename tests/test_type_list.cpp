@@ -30,6 +30,11 @@ struct static_square
     static const std::size_t value = N * N;
 };
 
+template <class T>
+struct extract_square_value
+{
+    static const std::size_t value = T::value;
+};
 
 TEST_CASE("test head and tail metafunctions", "[type_list]")
 {
@@ -429,4 +434,14 @@ TEST_CASE("test from_integer_template_instantiations",
         type_list<static_square<0>, static_square<1>, static_square<2>>>::value;
 
     REQUIRE(same);
+
+    SECTION("extract values from type list of static_squares")
+    {
+        auto& array_ref =
+            value_transform<instantiations, extract_square_value>::value;
+
+        REQUIRE(array_ref[0] == 0);
+        REQUIRE(array_ref[1] == 1);
+        REQUIRE(array_ref[2] == 4);
+    }
 }
