@@ -285,6 +285,9 @@ template <class TypeList>
 using index_sequence_for_t = typename index_sequence_for<TypeList>::type;
 
 
+////////////////////////////////////////////////////////////////////////////////
+// return a type_list consisitng of template instantiations of Template with the
+// types in TypeList
 template <template <class> class Template, class TypeList>
 struct from_template_instantiations;
 
