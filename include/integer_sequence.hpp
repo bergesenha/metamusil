@@ -8,6 +8,34 @@ namespace metamusil
 namespace int_seq
 {
 ////////////////////////////////////////////////////////////////////////////////
+// get first integer of a std::integer_sequence as value
+template <class IntSeq>
+struct head;
+
+template <class IntType, IntType First, IntType... Rest>
+struct head<std::integer_sequence<IntType, First, Rest...>>
+{
+    static const IntType value = First;
+    typedef IntType value_type;
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+// get tail of a std::integer_sequence
+template <class IntSeq>
+struct tail;
+
+template <class IntType, IntType First, IntType... Rest>
+struct tail<std::integer_sequence<IntType, First, Rest...>>
+{
+    typedef std::integer_sequence<IntType, Rest...> type;
+};
+
+template <class IntSeq>
+using tail_t = typename tail<IntSeq>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
 // append an integer to the end of a std::integer_sequence
 template <class IntSeq, typename IntSeq::value_type Num>
 struct append;
