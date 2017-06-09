@@ -1,7 +1,24 @@
 #include "catch.hpp"
 
+#include <type_traits>
+
 #include <integer_sequence.hpp>
 
+template <std::size_t N>
+struct is4 : std::false_type
+{
+};
+
+template <>
+struct is4<4> : std::true_type
+{
+};
+
+template <std::size_t N>
+struct is_odd
+{
+    static const bool value = N % 2;
+};
 
 TEST_CASE("test int_seq::append", "[int_seq::append]")
 {
@@ -67,4 +84,46 @@ TEST_CASE("test integer_sequence_from_range", "[integer_sequence_from_range]")
     REQUIRE(same2);
     REQUIRE(same3);
     REQUIRE(same4);
+}
+
+
+TEST_CASE("test append_if on integer_sequence", "[append_if]")
+{
+    typedef std::index_sequence<0, 1, 2, 3> start_sequence;
+
+    SECTION("attempt to append 5")
+    {
+        typedef metamusil::int_seq::append_if_t<start_sequence, 5, is4> result;
+
+        auto same = std::is_same<result, start_sequence>::value;
+
+        REQUIRE(same);
+    }
+
+    SECTION("attempt to append 4")
+    {
+        typedef metamusil::int_seq::append_if_t<start_sequence, 4, is4> result;
+
+        auto same =
+            std::is_same<result, std::index_sequence<0, 1, 2, 3, 4>>::value;
+
+        REQUIRE(same);
+    }
+}
+
+
+TEST_CASE("test filter on integer_sequence", "[filter]")
+{
+    typedef std::make_index_sequence<6> start_sequence;
+
+    typedef metamusil::int_seq::filter_t<start_sequence, is_odd> result;
+
+    auto isodd = is_odd<1>::value;
+    auto isodd2 = is_odd<2>::value;
+
+    auto same = std::is_same<result, std::index_sequence<1, 3, 5>>::value;
+
+    REQUIRE(isodd);
+    REQUIRE(isodd2 == false);
+    REQUIRE(same);
 }
