@@ -445,3 +445,13 @@ TEST_CASE("test from_integer_template_instantiations",
         REQUIRE(array_ref[2] == 4);
     }
 }
+
+
+TEST_CASE("test variable template version of length metafunction", "[length_v]")
+{
+    typedef type_list<int, long, double, char> the_list;
+
+    auto the_length = length_v<the_list>;
+
+    REQUIRE(the_length == 4);
+}

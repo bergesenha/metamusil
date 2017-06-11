@@ -176,6 +176,8 @@ struct length<type_list<Types...>>
     static const std::size_t value = sizeof...(Types);
 };
 
+template <class TypeList>
+constexpr std::size_t length_v = length<TypeList>::value;
 
 ////////////////////////////////////////////////////////////////////////////////
 // returns type at index in a type_list
