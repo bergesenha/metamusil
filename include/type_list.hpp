@@ -176,13 +176,15 @@ struct length<type_list<Types...>>
     static const std::size_t value = sizeof...(Types);
 };
 
+template <class TypeList>
+constexpr std::size_t length_v = length<TypeList>::value;
 
 ////////////////////////////////////////////////////////////////////////////////
 // returns type at index in a type_list
 template <class TypeList, std::size_t Index>
 struct type_at_index : type_at_index<tail_t<TypeList>, Index - 1>
 {
-    static_assert(length<TypeList>::value > Index, "out of bounds access");
+    static_assert(length_v<TypeList>> Index, "out of bounds access");
 };
 
 template <class TypeList>
@@ -212,6 +214,9 @@ struct index_of_type<type_list<T, Rest...>, T, Index>
 {
     static const std::size_t value = Index;
 };
+
+template <class TypeList, class T>
+constexpr std::size_t index_of_type_v = index_of_type<TypeList, T>::value;
 
 
 ////////////////////////////////////////////////////////////////////////////////
