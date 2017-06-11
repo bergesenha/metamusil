@@ -295,10 +295,10 @@ TEST_CASE("test type_at_index", "[type_list]")
 
 TEST_CASE("test index_of_type", "[type_list]")
 {
-    auto index0 = index_of_type<mylist, int>::value;
-    auto index1 = index_of_type<mylist, char>::value;
-    auto index2 = index_of_type<mylist, double>::value;
-    auto index3 = index_of_type<mylist, long>::value;
+    constexpr auto index0 = index_of_type_v<mylist, int>;
+    constexpr auto index1 = index_of_type_v<mylist, char>;
+    constexpr auto index2 = index_of_type_v<mylist, double>;
+    constexpr auto index3 = index_of_type_v<mylist, long>;
 
     REQUIRE(index0 == 0);
     REQUIRE(index1 == 1);
@@ -309,7 +309,7 @@ TEST_CASE("test index_of_type", "[type_list]")
     {
         typedef append_t<mylist, char> mylist2;
 
-        auto charindex = index_of_type<mylist2, char>::value;
+        constexpr auto charindex = index_of_type_v<mylist2, char>;
 
         REQUIRE(charindex == 1);
     }
