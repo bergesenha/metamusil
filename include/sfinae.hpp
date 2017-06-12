@@ -28,6 +28,10 @@ struct integral_specialization_defined<IntType,
 {
 };
 
+template <class IntType, template <IntType> class Target, IntType N>
+constexpr bool integral_specialization_defined_v =
+    integral_specialization_defined<IntType, Target, N>::value;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // returns true if specialization Target<T> is defined, otherwise returns false
