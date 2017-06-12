@@ -19,6 +19,9 @@ struct head<std::integer_sequence<IntType, First, Rest...>>
     typedef IntType value_type;
 };
 
+template <class IntSeq>
+constexpr typename head<IntSeq>::value_type head_v = head<IntSeq>::value;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // get tail of a std::integer_sequence
@@ -109,7 +112,7 @@ template <class IntSeq,
           class Accum = std::integer_sequence<typename IntSeq::value_type>>
 struct filter : filter<tail_t<IntSeq>,
                        UnaryPredicate,
-                       append_if_t<Accum, head<IntSeq>::value, UnaryPredicate>>
+                       append_if_t<Accum, head_v<IntSeq>, UnaryPredicate>>
 {
 };
 
