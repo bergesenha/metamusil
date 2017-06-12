@@ -45,4 +45,8 @@ struct specialization_defined<Target, T, void_t<decltype(Target<T>())>>
     : std::true_type
 {
 };
+
+template <template <class> class Target, class T>
+constexpr bool specialization_defined_v =
+    specialization_defined<Target, T>::value;
 }
