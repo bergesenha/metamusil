@@ -127,3 +127,20 @@ TEST_CASE("test filter on integer_sequence", "[filter]")
     REQUIRE(isodd2 == false);
     REQUIRE(same);
 }
+
+
+TEST_CASE("test integer_sequence_to_array", "[integer_sequence_to_array]")
+{
+    typedef std::index_sequence<0, 1, 2, 3> the_sequence;
+
+    typedef metamusil::int_seq::integer_sequence_to_array<the_sequence>
+        array_holder;
+
+    auto first = array_holder::value[0];
+    auto second = array_holder::value[1];
+    auto fourth = array_holder::value[3];
+
+    REQUIRE(first == 0);
+    REQUIRE(second == 1);
+    REQUIRE(fourth == 3);
+}
