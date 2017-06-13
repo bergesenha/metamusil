@@ -125,5 +125,21 @@ struct filter<std::integer_sequence<IntType>, UnaryPredicate, Accum>
 template <class IntSeq,
           template <typename IntSeq::value_type> class UnaryPredicate>
 using filter_t = typename filter<IntSeq, UnaryPredicate>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// return an array with values from std::integer_sequence
+template <class IntSeq>
+struct integer_sequence_to_array;
+
+template <class IntType, IntType... Seq>
+struct integer_sequence_to_array<std::integer_sequence<IntType, Seq...>>
+{
+    static constexpr IntType value[] = {Seq...};
+};
+
+template <class IntType, IntType... Seq>
+constexpr IntType
+    integer_sequence_to_array<std::integer_sequence<IntType, Seq...>>::value[];
 }
 }
