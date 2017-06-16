@@ -160,6 +160,13 @@ struct value_transform<type_list<Types...>, TypeMetaFunction>
     static constexpr type value[] = {TypeMetaFunction<Types>::value...};
 };
 
+template <template <class> class TypeMetaFunction>
+struct value_transform<type_list<>, TypeMetaFunction>
+{
+    typedef std::nullptr_t type;
+    static constexpr std::nullptr_t value = nullptr;
+};
+
 template <class... Types, template <class> class TypeMetaFunction>
 constexpr typename value_transform<type_list<Types...>, TypeMetaFunction>::type
     value_transform<type_list<Types...>, TypeMetaFunction>::value[];

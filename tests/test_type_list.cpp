@@ -260,6 +260,17 @@ TEST_CASE("test value_transform metafunction", "[type_list]")
         REQUIRE(length == 1);
         REQUIRE(array_ref[0] == sizeof(int));
     }
+
+    SECTION("value_transform on empty type_list")
+    {
+        typedef value_transform<type_list<>, get_size> holds_value;
+
+        auto same = std::is_same<holds_value::type, std::nullptr_t>::value;
+        auto same2 = holds_value::value == nullptr;
+
+        REQUIRE(same);
+        REQUIRE(same2);
+    }
 }
 
 
