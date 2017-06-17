@@ -391,5 +391,20 @@ struct remove_if
 
 template <class TypeList, template <class> class UnaryPredicate>
 using remove_if_t = typename remove_if<TypeList, UnaryPredicate>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// remove element if it is of type T
+template <class TypeList, class T>
+struct remove
+{
+    template <class U>
+    using is_T = std::is_same<U, T>;
+
+    typedef remove_if_t<TypeList, is_T> type;
+};
+
+template <class TypeList, class T>
+using remove_t = typename remove<TypeList, T>::type;
 }
 }

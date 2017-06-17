@@ -625,3 +625,16 @@ TEST_CASE("test remove_if on type_list", "[remove_if]")
 
     REQUIRE(same);
 }
+
+
+TEST_CASE("test remove on type_list", "[remove]")
+{
+    typedef type_list<int, float, long, double> the_list;
+
+    typedef remove_t<the_list, float> float_removed_list;
+
+    auto same =
+        std::is_same<float_removed_list, type_list<int, long, double>>::value;
+
+    REQUIRE(same);
+}
