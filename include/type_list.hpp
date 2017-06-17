@@ -380,5 +380,16 @@ struct negate
     using type = negative_predicate<T>;
 };
 
+
+////////////////////////////////////////////////////////////////////////////////
+// remove element if it satisfies UnaryPredicate
+template <class TypeList, template <class> class UnaryPredicate>
+struct remove_if
+{
+    typedef filter_t<TypeList, negate<UnaryPredicate>::template type> type;
+};
+
+template <class TypeList, template <class> class UnaryPredicate>
+using remove_if_t = typename remove_if<TypeList, UnaryPredicate>::type;
 }
 }

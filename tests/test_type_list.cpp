@@ -613,3 +613,15 @@ TEST_CASE("test negate in metaalgorithm", "[negate]")
 
     REQUIRE(same);
 }
+
+
+TEST_CASE("test remove_if on type_list", "[remove_if]")
+{
+    typedef type_list<int, float, long, double> the_list;
+
+    typedef remove_if_t<the_list, std::is_integral> floats_left_list;
+
+    auto same = std::is_same<floats_left_list, type_list<float, double>>::value;
+
+    REQUIRE(same);
+}
