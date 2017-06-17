@@ -36,6 +36,12 @@ struct extract_square_value
     static const std::size_t value = T::value;
 };
 
+
+template <class A, class B>
+struct binary_template
+{
+};
+
 TEST_CASE("test head and tail metafunctions", "[type_list]")
 {
 
@@ -520,4 +526,70 @@ TEST_CASE("test variable template version of length metafunction", "[length_v]")
     auto the_length = length_v<the_list>;
 
     REQUIRE(the_length == 4);
+}
+
+
+TEST_CASE("test for_each_combination with empty type_list",
+          "[for_each_combination]")
+{
+    typedef type_list<> the_list;
+
+    typedef for_each_combination_t<the_list, binary_template> result;
+
+    auto same = std::is_same<result, type_list<>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test for_each_combination with type_list of one element",
+          "[for_each_combination]")
+{
+    typedef type_list<int> the_list;
+
+    typedef for_each_combination_t<the_list, binary_template> result;
+
+    auto same =
+        std::is_same<result, type_list<binary_template<int, int>>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test for_each_combination with type_list of two elements",
+          "[for_each_combination]")
+{
+    typedef type_list<int, long> the_list;
+
+    typedef for_each_combination_t<the_list, binary_template> result;
+
+    auto same = std::is_same<result,
+                             type_list<binary_template<int, int>,
+                                       binary_template<int, long>,
+                                       binary_template<long, int>,
+                                       binary_template<long, long>>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test for_each_combination with type_list of three elements",
+          "[for_each_combination]")
+{
+    typedef type_list<int, long, double> the_list;
+
+    typedef for_each_combination_t<the_list, binary_template> result;
+
+    auto same = std::is_same<result,
+                             type_list<binary_template<int, int>,
+                                       binary_template<int, long>,
+                                       binary_template<int, double>,
+                                       binary_template<long, int>,
+                                       binary_template<long, long>,
+                                       binary_template<long, double>,
+                                       binary_template<double, int>,
+                                       binary_template<double, long>,
+                                       binary_template<double, double>>>::value;
+
+    REQUIRE(same);
 }

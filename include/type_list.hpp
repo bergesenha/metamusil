@@ -333,5 +333,35 @@ template <class IntType, template <IntType> class Template, class IntSeq>
 using from_integer_template_instantiations_t =
     typename from_integer_template_instantiations<IntType, Template, IntSeq>::
         type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// instantiate BinaryTemplate with every combination of types in TypeList
+template <class TypeList,
+          template <class, class> class BinaryTemplate,
+          class Remaining = TypeList>
+struct for_each_combination
+{
+    template <class T>
+    using BindBinaryTemplate = BinaryTemplate<head_t<Remaining>, T>;
+
+    typedef type_transform_t<TypeList, BindBinaryTemplate> current_list;
+
+    typedef concat_t<current_list,
+                     typename for_each_combination<TypeList,
+                                                   BinaryTemplate,
+                                                   tail_t<Remaining>>::type>
+        type;
+};
+
+template <class TypeList, template <class, class> class BinaryTemplate>
+struct for_each_combination<TypeList, BinaryTemplate, type_list<>>
+{
+    typedef type_list<> type;
+};
+
+template <class TypeList, template <class, class> class BinaryTemplate>
+using for_each_combination_t =
+    typename for_each_combination<TypeList, BinaryTemplate>::type;
 }
 }
