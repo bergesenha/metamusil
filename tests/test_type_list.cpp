@@ -76,7 +76,7 @@ TEST_CASE("test prepend and append metafunctions", "[type_list]")
     SECTION("append a float")
     {
         typedef append_t<mylist, float> mylist2;
-        constexpr std::size_t sizeoflist = length<mylist>::value;
+        constexpr std::size_t sizeoflist = length_v<mylist>;
 
         auto same =
             std::is_same<float, type_at_index_t<mylist2, sizeoflist>>::value;
@@ -276,9 +276,9 @@ TEST_CASE("test value_transform metafunction", "[type_list]")
 
 TEST_CASE("test length metafunction", "[type_list]")
 {
-    auto length0 = length<mylist>::value;
-    auto length1 = length<type_list<int>>::value;
-    auto length2 = length<type_list<>>::value;
+    auto length0 = length_v<mylist>;
+    auto length1 = length_v<type_list<int>>;
+    auto length2 = length_v<type_list<>>;
 
     REQUIRE(length0 == 4);
     REQUIRE(length1 == 1);
@@ -332,7 +332,7 @@ TEST_CASE("test filter metaalgorithm", "[type_list]")
     {
         typedef filter_t<mylist, std::is_floating_point> only_floats;
 
-        auto length1 = length<only_floats>::value;
+        auto length1 = length_v<only_floats>;
 
         auto same = std::is_same<only_floats, type_list<double>>::value;
 
@@ -344,7 +344,7 @@ TEST_CASE("test filter metaalgorithm", "[type_list]")
     {
         typedef filter_t<mylist, std::is_integral> only_integrals;
 
-        auto length1 = length<only_integrals>::value;
+        auto length1 = length_v<only_integrals>;
 
         auto same =
             std::is_same<only_integrals, type_list<int, char, long>>::value;
@@ -357,7 +357,7 @@ TEST_CASE("test filter metaalgorithm", "[type_list]")
     {
         typedef filter_t<type_list<>, std::is_signed> empty;
 
-        auto length1 = length<empty>::value;
+        auto length1 = length_v<empty>;
         auto same = std::is_same<empty, type_list<>>::value;
 
         REQUIRE(length1 == 0);
@@ -410,6 +410,61 @@ TEST_CASE("test reorder and order metaalgorithm", "[type_list]")
 
             REQUIRE(same_order);
         }
+    }
+}
+
+
+TEST_CASE("test order/order_t", "[order]")
+{
+    typedef type_list<int, long, float, double> reference_list;
+
+    SECTION("order of a type_list of one element")
+    {
+        typedef type_list<float> compare_list;
+
+        typedef order_t<compare_list, reference_list> order_of_compare_list;
+
+        auto same =
+            std::is_same<order_of_compare_list, std::index_sequence<2>>::value;
+
+        REQUIRE(same);
+    }
+
+    SECTION("order of a type_list of same number of elements as reference_list")
+    {
+        typedef type_list<double, float, long, int> reversed_list;
+
+        typedef order_t<reversed_list, reference_list> reverse_order;
+
+        auto same =
+            std::is_same<reverse_order, std::index_sequence<3, 2, 1, 0>>::value;
+
+        REQUIRE(same);
+    }
+
+    SECTION("order of a type_list of more elements than reference list")
+    {
+        typedef type_list<double, float, long, int, long, float, double>
+            long_list;
+
+        typedef order_t<long_list, reference_list> order_of_long_list;
+
+        auto same =
+            std::is_same<order_of_long_list,
+                         std::index_sequence<3, 2, 1, 0, 1, 2, 3>>::value;
+
+        REQUIRE(same);
+    }
+
+    SECTION("order of an empty type list should return empty index_sequence")
+    {
+        typedef type_list<> empty_list;
+
+        typedef order_t<empty_list, reference_list> order_of_empty;
+
+        auto same = std::is_same<order_of_empty, std::index_sequence<>>::value;
+
+        REQUIRE(same);
     }
 }
 
