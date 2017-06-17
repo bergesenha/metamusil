@@ -135,7 +135,15 @@ struct integer_sequence_to_array;
 template <class IntType, IntType... Seq>
 struct integer_sequence_to_array<std::integer_sequence<IntType, Seq...>>
 {
+    typedef IntType value_type;
     static constexpr IntType value[] = {Seq...};
+};
+
+template <class IntType>
+struct integer_sequence_to_array<std::integer_sequence<IntType>>
+{
+    typedef IntType value_type;
+    static constexpr IntType* value = nullptr;
 };
 
 template <class IntType, IntType... Seq>

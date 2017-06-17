@@ -144,3 +144,17 @@ TEST_CASE("test integer_sequence_to_array", "[integer_sequence_to_array]")
     REQUIRE(second == 1);
     REQUIRE(fourth == 3);
 }
+
+
+TEST_CASE("test integer_sequence_to_array with empty sequence",
+          "[integer_sequence_to_array]")
+{
+    typedef std::index_sequence<> empty_sequence;
+
+    typedef metamusil::int_seq::integer_sequence_to_array<empty_sequence>
+        array_holder;
+
+    auto same = array_holder::value == nullptr;
+
+    REQUIRE(same);
+}
