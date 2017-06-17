@@ -76,7 +76,7 @@ TEST_CASE("test prepend and append metafunctions", "[type_list]")
     SECTION("append a float")
     {
         typedef append_t<mylist, float> mylist2;
-        constexpr std::size_t sizeoflist = length<mylist>::value;
+        constexpr std::size_t sizeoflist = length_v<mylist>;
 
         auto same =
             std::is_same<float, type_at_index_t<mylist2, sizeoflist>>::value;
@@ -276,9 +276,9 @@ TEST_CASE("test value_transform metafunction", "[type_list]")
 
 TEST_CASE("test length metafunction", "[type_list]")
 {
-    auto length0 = length<mylist>::value;
-    auto length1 = length<type_list<int>>::value;
-    auto length2 = length<type_list<>>::value;
+    auto length0 = length_v<mylist>;
+    auto length1 = length_v<type_list<int>>;
+    auto length2 = length_v<type_list<>>;
 
     REQUIRE(length0 == 4);
     REQUIRE(length1 == 1);
@@ -332,7 +332,7 @@ TEST_CASE("test filter metaalgorithm", "[type_list]")
     {
         typedef filter_t<mylist, std::is_floating_point> only_floats;
 
-        auto length1 = length<only_floats>::value;
+        auto length1 = length_v<only_floats>;
 
         auto same = std::is_same<only_floats, type_list<double>>::value;
 
@@ -344,7 +344,7 @@ TEST_CASE("test filter metaalgorithm", "[type_list]")
     {
         typedef filter_t<mylist, std::is_integral> only_integrals;
 
-        auto length1 = length<only_integrals>::value;
+        auto length1 = length_v<only_integrals>;
 
         auto same =
             std::is_same<only_integrals, type_list<int, char, long>>::value;
@@ -357,7 +357,7 @@ TEST_CASE("test filter metaalgorithm", "[type_list]")
     {
         typedef filter_t<type_list<>, std::is_signed> empty;
 
-        auto length1 = length<empty>::value;
+        auto length1 = length_v<empty>;
         auto same = std::is_same<empty, type_list<>>::value;
 
         REQUIRE(length1 == 0);
