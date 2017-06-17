@@ -413,6 +413,61 @@ TEST_CASE("test reorder and order metaalgorithm", "[type_list]")
     }
 }
 
+
+TEST_CASE("test order/order_t", "[order]")
+{
+    typedef type_list<int, long, float, double> reference_list;
+
+    SECTION("order of a type_list of one element")
+    {
+        typedef type_list<float> compare_list;
+
+        typedef order_t<compare_list, reference_list> order_of_compare_list;
+
+        auto same =
+            std::is_same<order_of_compare_list, std::index_sequence<2>>::value;
+
+        REQUIRE(same);
+    }
+
+    SECTION("order of a type_list of same number of elements as reference_list")
+    {
+        typedef type_list<double, float, long, int> reversed_list;
+
+        typedef order_t<reversed_list, reference_list> reverse_order;
+
+        auto same =
+            std::is_same<reverse_order, std::index_sequence<3, 2, 1, 0>>::value;
+
+        REQUIRE(same);
+    }
+
+    SECTION("order of a type_list of more elements than reference list")
+    {
+        typedef type_list<double, float, long, int, long, float, double>
+            long_list;
+
+        typedef order_t<long_list, reference_list> order_of_long_list;
+
+        auto same =
+            std::is_same<order_of_long_list,
+                         std::index_sequence<3, 2, 1, 0, 1, 2, 3>>::value;
+
+        REQUIRE(same);
+    }
+
+    SECTION("order of an empty type list should return empty index_sequence")
+    {
+        typedef type_list<> empty_list;
+
+        typedef order_t<empty_list, reference_list> order_of_empty;
+
+        auto same = std::is_same<order_of_empty, std::index_sequence<>>::value;
+
+        REQUIRE(same);
+    }
+}
+
 TEST_CASE("test from_template_instantiations", "[from_template_instantiations]")
 {
     typedef type_list<int, long, double, char> the_types;
