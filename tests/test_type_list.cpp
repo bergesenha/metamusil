@@ -617,6 +617,40 @@ TEST_CASE("test negate in metaalgorithm", "[negate]")
 }
 
 
+TEST_CASE("test remove_if on empty_type list", "[remove_if]")
+{
+    typedef remove_if_t<type_list<>, std::is_integral> the_list;
+
+    auto same = std::is_same<the_list, type_list<>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test remove_if on type_list of one matching type", "[remove_if]")
+{
+    typedef type_list<int> the_list;
+
+    typedef remove_if_t<the_list, std::is_integral> nothing_left_list;
+
+    auto same = std::is_same<nothing_left_list, type_list<>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test remove_if on type_list of one non-matching type", "[remove_if]")
+{
+    typedef type_list<int> the_list;
+
+    typedef remove_if_t<the_list, std::is_floating_point> int_left_list;
+
+    auto same = std::is_same<int_left_list, type_list<int>>::value;
+
+    REQUIRE(same);
+}
+
+
 TEST_CASE("test remove_if on type_list", "[remove_if]")
 {
     typedef type_list<int, float, long, double> the_list;
@@ -624,6 +658,42 @@ TEST_CASE("test remove_if on type_list", "[remove_if]")
     typedef remove_if_t<the_list, std::is_integral> floats_left_list;
 
     auto same = std::is_same<floats_left_list, type_list<float, double>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("rest remove on empty type_list", "[remove]")
+{
+    typedef type_list<> the_list;
+
+    typedef remove_t<the_list, double> result;
+
+    auto same = std::is_same<result, type_list<>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test remove successfully on list of one element", "[remove]")
+{
+    typedef type_list<float> the_list;
+
+    typedef remove_t<the_list, float> empty_list;
+
+    auto same = std::is_same<empty_list, type_list<>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test remove unsuccessfully on list of one element", "[remove]")
+{
+    typedef type_list<float> the_list;
+
+    typedef remove_t<the_list, int> float_left_list;
+
+    auto same = std::is_same<float_left_list, type_list<float>>::value;
 
     REQUIRE(same);
 }
