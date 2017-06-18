@@ -1,6 +1,7 @@
 #include "catch.hpp"
 
 #include <type_traits>
+#include <tuple>
 
 #include <type_list.hpp>
 
@@ -752,3 +753,42 @@ TEST_CASE("test zip on two type_lists of several elements", "[zip]")
 
     REQUIRE(same);
 }
+
+
+TEST_CASE("test apply with empty type_list", "[apply]")
+{
+    typedef type_list<> the_list;
+
+    typedef apply_t<the_list, std::tuple> empty_tuple;
+
+    auto same = std::is_same<empty_tuple, std::tuple<>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test apply with type_list of one element", "[apply]")
+{
+    typedef type_list<int> the_list;
+
+    typedef apply_t<the_list, std::is_integral> instantiated_trait;
+
+    auto same = std::is_same<instantiated_trait, std::is_integral<int>>::value;
+    auto is_int = instantiated_trait::value;
+
+    REQUIRE(same);
+    REQUIRE(is_int);
+}
+
+TEST_CASE("test apply type_list of several elements", "[apply]")
+{
+    typedef type_list<int, float, double> triple;
+
+    typedef apply_t<triple, std::tuple> triple_tuple;
+
+    auto same =
+        std::is_same<triple_tuple, std::tuple<int, float, double>>::value;
+
+    REQUIRE(same);
+}
+

@@ -414,5 +414,20 @@ template <class TypeList1,
           class TypeList2,
           template <class, class> class BinaryTemplate>
 using zip_t = typename zip<TypeList1, TypeList2, BinaryTemplate>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// use the elements of a type_list as arguments to a template
+template <class TypeList, template <class...> class MetaFunction>
+struct apply;
+
+template <class... Types, template <class...> class MetaFunction>
+struct apply<type_list<Types...>, MetaFunction>
+{
+    typedef MetaFunction<Types...> type;
+};
+
+template <class TypeList, template <class...> class MetaFunction>
+using apply_t = typename apply<TypeList, MetaFunction>::type;
 }
 }
