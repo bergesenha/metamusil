@@ -710,3 +710,45 @@ TEST_CASE("test remove on type_list", "[remove]")
 
     REQUIRE(same);
 }
+
+
+TEST_CASE("test zip on two empty type_lists", "[zip]")
+{
+    typedef type_list<> list1;
+    typedef type_list<> list2;
+
+    typedef zip_t<list1, list2, binary_template> zipped;
+
+    auto same = std::is_same<zipped, type_list<>>::value;
+
+    REQUIRE(same);
+}
+
+TEST_CASE("test zip on two type_list of one element each", "[zip]")
+{
+    typedef type_list<int> list1;
+    typedef type_list<float> list2;
+
+    typedef zip_t<list1, list2, binary_template> zipped;
+
+    auto same =
+        std::is_same<zipped, type_list<binary_template<int, float>>>::value;
+
+    REQUIRE(same);
+}
+
+
+TEST_CASE("test zip on two type_lists of several elements", "[zip]")
+{
+    typedef type_list<int, float, double> list1;
+    typedef type_list<double, float, int> list2;
+
+    typedef zip_t<list1, list2, binary_template> zipped;
+
+    auto same = std::is_same<zipped,
+                             type_list<binary_template<int, double>,
+                                       binary_template<float, float>,
+                                       binary_template<double, int>>>::value;
+
+    REQUIRE(same);
+}
