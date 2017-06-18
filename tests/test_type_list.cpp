@@ -597,7 +597,8 @@ TEST_CASE("test for_each_combination with type_list of three elements",
 
 TEST_CASE("test negate", "[negate]")
 {
-    auto isnt_integral = negate<std::is_integral>::type<float>::value;
+    auto isnt_integral =
+        metamusil::negate<std::is_integral>::type<float>::value;
 
     REQUIRE(isnt_integral);
 }
@@ -607,7 +608,8 @@ TEST_CASE("test negate in metaalgorithm", "[negate]")
 {
     typedef type_list<int, float, double> the_list;
 
-    typedef filter_t<the_list, negate<std::is_integral>::type> filtered;
+    typedef filter_t<the_list, metamusil::negate<std::is_integral>::type>
+        filtered;
 
     auto same = std::is_same<filtered, type_list<float, double>>::value;
 

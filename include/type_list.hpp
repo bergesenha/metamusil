@@ -2,6 +2,8 @@
 #include <cstddef>
 #include <utility>
 
+#include "misc.hpp"
+
 
 namespace metamusil
 {
@@ -363,22 +365,6 @@ struct for_each_combination<TypeList, BinaryTemplate, type_list<>>
 template <class TypeList, template <class, class> class BinaryTemplate>
 using for_each_combination_t =
     typename for_each_combination<TypeList, BinaryTemplate>::type;
-
-
-////////////////////////////////////////////////////////////////////////////////
-// negates a unary metapredicate
-template <template <class> class UnaryPredicate>
-struct negate
-{
-    template <class T>
-    struct negative_predicate
-    {
-        static const bool value = !UnaryPredicate<T>::value;
-    };
-
-    template <class T>
-    using type = negative_predicate<T>;
-};
 
 
 ////////////////////////////////////////////////////////////////////////////////
