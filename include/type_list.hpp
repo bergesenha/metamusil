@@ -173,6 +173,8 @@ template <class... Types, template <class> class TypeMetaFunction>
 constexpr typename value_transform<type_list<Types...>, TypeMetaFunction>::type
     value_transform<type_list<Types...>, TypeMetaFunction>::value[];
 
+template <template <class> class TypeMetaFunction>
+constexpr std::nullptr_t value_transform<type_list<>, TypeMetaFunction>::value;
 
 ////////////////////////////////////////////////////////////////////////////////
 // returns length of a type_list
