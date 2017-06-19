@@ -149,5 +149,18 @@ struct integer_sequence_to_array<std::integer_sequence<IntType>>
 template <class IntType, IntType... Seq>
 constexpr IntType
     integer_sequence_to_array<std::integer_sequence<IntType, Seq...>>::value[];
+
+
+template <class IntSeq>
+struct length;
+
+template <class IntType, IntType... Seq>
+struct length<std::integer_sequence<IntType, Seq...>>
+{
+    static const std::size_t value = sizeof...(Seq);
+};
+
+template <class IntSeq>
+constexpr std::size_t length_v = length<IntSeq>::value;
 }
 }
