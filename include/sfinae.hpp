@@ -35,18 +35,23 @@ constexpr bool integral_specialization_defined_v =
 
 ////////////////////////////////////////////////////////////////////////////////
 // returns true if specialization Target<T> is defined, otherwise returns false
-template <template <class> class Target, class T, class = void>
-struct specialization_defined : std::false_type
+template <class, template <class...> class Target, class... Args>
+struct specialization_defined_impl : std::false_type
 {
 };
 
-template <template <class> class Target, class T>
-struct specialization_defined<Target, T, void_t<decltype(Target<T>())>>
-    : std::true_type
+template <template <class...> class Target, class... Args>
+struct specialization_defined_impl<void_t<decltype(Target<Args...>())>,
+                                   Target,
+                                   Args...> : std::true_type
 {
 };
 
-template <template <class> class Target, class T>
+template <template <class...> class Target, class... Args>
+using specialization_defined =
+    specialization_defined_impl<void, Target, Args...>;
+
+template <template <class...> class Target, class... Args>
 constexpr bool specialization_defined_v =
-    specialization_defined<Target, T>::value;
+    specialization_defined<Target, Args...>::value;
 }
