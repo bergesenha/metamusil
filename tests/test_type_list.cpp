@@ -812,3 +812,24 @@ TEST_CASE("test all_of on a type_list", "[all_of]")
     REQUIRE(all_arithmetic);
 }
 
+TEST_CASE("test any_of on empty type_list", "[any_of]")
+{
+    typedef type_list<> the_list;
+
+    constexpr auto shouldfalse = any_of_v<the_list, std::is_integral>;
+
+    REQUIRE(shouldfalse == false);
+}
+
+TEST_CASE("test any_of on type_list of several arithmetic types", "[any_of]")
+{
+    typedef type_list<int, long, long long, unsigned int> the_list;
+
+    constexpr auto integrals = any_of_v<the_list, std::is_integral>;
+    constexpr auto floatingpoints = any_of_v<the_list, std::is_floating_point>;
+    constexpr auto isunsigned = any_of_v<the_list, std::is_unsigned>;
+
+    REQUIRE(integrals);
+    REQUIRE(floatingpoints == false);
+    REQUIRE(isunsigned);
+}
