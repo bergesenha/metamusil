@@ -792,3 +792,44 @@ TEST_CASE("test apply type_list of several elements", "[apply]")
     REQUIRE(same);
 }
 
+TEST_CASE("test all_of on empty type_list", "[all_of]")
+{
+    typedef type_list<> the_list;
+
+    constexpr auto shouldtrue = all_of_v<the_list, std::is_signed>;
+
+    REQUIRE(shouldtrue);
+}
+
+TEST_CASE("test all_of on a type_list", "[all_of]")
+{
+    typedef type_list<int, long, float> the_list;
+
+    constexpr auto all_integrals = all_of_v<the_list, std::is_integral>;
+    constexpr auto all_arithmetic = all_of_v<the_list, std::is_arithmetic>;
+
+    REQUIRE(!all_integrals);
+    REQUIRE(all_arithmetic);
+}
+
+TEST_CASE("test any_of on empty type_list", "[any_of]")
+{
+    typedef type_list<> the_list;
+
+    constexpr auto shouldfalse = any_of_v<the_list, std::is_integral>;
+
+    REQUIRE(shouldfalse == false);
+}
+
+TEST_CASE("test any_of on type_list of several arithmetic types", "[any_of]")
+{
+    typedef type_list<int, long, long long, unsigned int> the_list;
+
+    constexpr auto integrals = any_of_v<the_list, std::is_integral>;
+    constexpr auto floatingpoints = any_of_v<the_list, std::is_floating_point>;
+    constexpr auto isunsigned = any_of_v<the_list, std::is_unsigned>;
+
+    REQUIRE(integrals);
+    REQUIRE(floatingpoints == false);
+    REQUIRE(isunsigned);
+}
