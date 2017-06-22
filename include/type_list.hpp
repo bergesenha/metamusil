@@ -429,5 +429,23 @@ struct apply<type_list<Types...>, MetaFunction>
 
 template <class TypeList, template <class...> class MetaFunction>
 using apply_t = typename apply<TypeList, MetaFunction>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// checks that UnaryPredicate is true for all elements in TypeList
+template <class TypeList, template <class> class UnaryPredicate>
+struct all_of
+{
+    static const bool value = UnaryPredicate<head_t<TypeList>>::value &&
+                              all_of<tail_t<TypeList>, UnaryPredicate>::value;
+};
+
+template <template <class> class UnaryPredicate>
+struct all_of<type_list<>, UnaryPredicate> : std::true_type
+{
+};
+
+template <class TypeList, template <class> class UnaryPredicate>
+constexpr bool all_of_v = all_of<TypeList, UnaryPredicate>::value;
 }
 }

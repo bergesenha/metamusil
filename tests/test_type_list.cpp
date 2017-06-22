@@ -792,3 +792,23 @@ TEST_CASE("test apply type_list of several elements", "[apply]")
     REQUIRE(same);
 }
 
+TEST_CASE("test all_of on empty type_list", "[all_of]")
+{
+    typedef type_list<> the_list;
+
+    constexpr auto shouldtrue = all_of_v<the_list, std::is_signed>;
+
+    REQUIRE(shouldtrue);
+}
+
+TEST_CASE("test all_of on a type_list", "[all_of]")
+{
+    typedef type_list<int, long, float> the_list;
+
+    constexpr auto all_integrals = all_of_v<the_list, std::is_integral>;
+    constexpr auto all_arithmetic = all_of_v<the_list, std::is_arithmetic>;
+
+    REQUIRE(!all_integrals);
+    REQUIRE(all_arithmetic);
+}
+
