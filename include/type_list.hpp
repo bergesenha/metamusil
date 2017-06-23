@@ -175,6 +175,35 @@ constexpr typename value_transform<type_list<Types...>, TypeMetaFunction>::type
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// same as metafunction value_transform, except the type of the values in the
+// resulting array value[] is specified explicitly. the resultint value member
+// in the case of an empty TypeList will have the type const T* and a value of
+// nullptr.
+template <class TypeList, template <class> class TypeMetaFunction, class T>
+struct explicit_value_transform;
+
+template <class... Types, template <class> class TypeMetaFunction, class T>
+struct explicit_value_transform<type_list<Types...>, TypeMetaFunction, T>
+{
+    typedef T type;
+    static constexpr type value[] = {TypeMetaFunction<Types>::value...};
+};
+
+template <class... Types, template <class> class TypeMetaFunction, class T>
+constexpr T
+    explicit_value_transform<type_list<Types...>, TypeMetaFunction, T>::value[];
+
+template <template <class> class TypeMetaFunction, class T>
+struct explicit_value_transform<type_list<>, TypeMetaFunction, T>
+{
+    typedef T type;
+    static constexpr type* value = nullptr;
+};
+
+template <template <class> class TypeMetaFunction, class T>
+constexpr T* explicit_value_transform<type_list<>, TypeMetaFunction, T>::value;
+
+////////////////////////////////////////////////////////////////////////////////
 // returns length of a type_list
 template <class TypeList>
 struct length;
