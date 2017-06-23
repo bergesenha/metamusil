@@ -833,3 +833,38 @@ TEST_CASE("test any_of on type_list of several arithmetic types", "[any_of]")
     REQUIRE(floatingpoints == false);
     REQUIRE(isunsigned);
 }
+
+
+TEST_CASE("test explicit_value_transform on type_list of types",
+          "[explicit_value_transform]")
+{
+    typedef type_list<int, long, float, unsigned int> the_list;
+
+    typedef explicit_value_transform<the_list, get_size, std::size_t>
+        size_array_holder;
+
+    constexpr auto same =
+        std::is_same<size_array_holder::type, std::size_t>::value;
+
+    REQUIRE(same);
+    REQUIRE(size_array_holder::value[0] == sizeof(int));
+    REQUIRE(size_array_holder::value[1] == sizeof(long));
+    REQUIRE(size_array_holder::value[2] == sizeof(float));
+    REQUIRE(size_array_holder::value[3] == sizeof(unsigned int));
+}
+
+
+TEST_CASE("test explicit_value_transform on empty type_list",
+          "[explicit_value_transform]")
+{
+    typedef type_list<> the_list;
+
+    typedef explicit_value_transform<the_list, get_size, std::size_t>
+        size_array_holder;
+
+    constexpr auto same =
+        std::is_same<size_array_holder::type, std::size_t>::value;
+
+    REQUIRE(same);
+    REQUIRE(size_array_holder::value == nullptr);
+}
