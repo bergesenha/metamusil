@@ -31,6 +31,16 @@ func5(const char*, long long)
     return nullptr;
 }
 
+void
+func6(const int& i)
+{
+}
+
+void
+func7(int& i)
+{
+}
+
 struct class1
 {
     void mfunc1(void);
@@ -116,6 +126,8 @@ TEST_CASE("test parameter type deduction for free functions",
     typedef deduce_parameter_types_t<decltype(func3)> param_list3;
     typedef deduce_parameter_types_t<decltype(func4)> param_list4;
     typedef deduce_parameter_types_t<decltype(func5)> param_list5;
+    typedef deduce_parameter_types_t<decltype(func6)> param_list6;
+    typedef deduce_parameter_types_t<decltype(func7)> param_list7;
 
     auto same1 = std::is_same<param_list1, t_list::type_list<>>::value;
     REQUIRE(same1);
@@ -129,6 +141,11 @@ TEST_CASE("test parameter type deduction for free functions",
     auto same5 = std::is_same<param_list5,
                               t_list::type_list<const char*, long long>>::value;
     REQUIRE(same5);
+    auto same6 =
+        std::is_same<param_list6, t_list::type_list<const int&>>::value;
+    REQUIRE(same6);
+    auto same7 = std::is_same<param_list7, t_list::type_list<int&>>::value;
+    REQUIRE(same7);
 }
 
 
