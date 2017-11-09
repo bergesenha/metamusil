@@ -152,5 +152,14 @@ struct to_type_tag_array<type_stack<T, Tags...>>
 
 template <class T, class... Tags>
 constexpr const type_tag to_type_tag_array<type_stack<T, Tags...>>::value[];
+
+template <class T>
+struct to_type_tag_array<type_stack<T>>
+{
+    static constexpr type_tag* value = nullptr;
+};
+
+template <class T>
+constexpr type_tag* to_type_tag_array<type_stack<T>>::value;
 }
 }
