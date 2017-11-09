@@ -83,29 +83,5 @@ struct compose<type_descriptor<T, Tag, RestTags...>>
 
 template <class TypeStack>
 using compose_t = typename compose<TypeStack>::type;
-
-
-// create array of tags of modifiers/qualifiers
-template <class TypeStack>
-struct to_type_tag_array;
-
-template <class T, class... Tags>
-struct to_type_tag_array<type_descriptor<T, Tags...>>
-{
-    static constexpr const type_tag value[] = {Tags::value...};
-};
-
-template <class T, class... Tags>
-constexpr const type_tag
-    to_type_tag_array<type_descriptor<T, Tags...>>::value[];
-
-template <class T>
-struct to_type_tag_array<type_descriptor<T>>
-{
-    static constexpr type_tag* value = nullptr;
-};
-
-template <class T>
-constexpr type_tag* to_type_tag_array<type_descriptor<T>>::value;
 }
 }
