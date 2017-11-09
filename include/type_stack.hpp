@@ -119,5 +119,24 @@ struct apply<T, std::integral_constant<type_tag, type_tag::rreference_tag>>
 template <class T, class Tag>
 using apply_t = typename apply<T, Tag>::type;
 
+
+// compose a type from a type_stack
+template <class TypeStack>
+struct compose;
+
+template <class T>
+struct compose<type_stack<T>>
+{
+    typedef T type;
+};
+
+template <class T, class Tag, class... RestTags>
+struct compose<type_stack<T, Tag, RestTags...>>
+    : compose<type_stack<apply_t<T, Tag>, RestTags...>>
+{
+};
+
+template <class TypeStack>
+using compose_t = typename compose<TypeStack>::type;
 }
 }
