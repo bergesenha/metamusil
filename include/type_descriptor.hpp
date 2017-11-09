@@ -7,7 +7,7 @@
 
 namespace metamusil
 {
-namespace t_stack
+namespace t_descriptor
 {
 
 
@@ -83,5 +83,56 @@ struct compose<type_descriptor<T, Tag, RestTags...>>
 
 template <class TypeStack>
 using compose_t = typename compose<TypeStack>::type;
+
+
+// make type_descriptor from type T and type_stack of tags TagStack
+template <class T, class TagStack>
+struct make_type_descriptor;
+
+template <class T, class... Ts>
+struct make_type_descriptor<T, t_stack::type_stack<Ts...>>
+{
+    typedef type_descriptor<T, Ts...> type;
+};
+
+template <class T, class TagStack>
+using make_type_descriptor_t = typename make_type_descriptor<T, TagStack>::type;
+
+// decompose a type into a type_descriptor
+template <class T, class TagStack>
+struct decompose_
+{
+    typedef make_type_descriptor_t<T, TagStack> type;
+};
+
+template <class T, class TagStack>
+struct decompose_<T*, TagStack>
+    : decompose_<T, t_stack::push_t<TagStack, Pointer>>
+{
+};
+
+template <class T, class TagStack>
+struct decompose_<const T, TagStack>
+    : decompose_<T, t_stack::push_t<TagStack, Const>>
+{
+};
+
+template <class T, class TagStack>
+struct decompose_<T&, TagStack>
+    : decompose_<T, t_stack::push_t<TagStack, LReference>>
+{
+};
+
+template <class T, class TagStack>
+struct decompose_<T&&, TagStack>
+    : decompose_<T, t_stack::push_t<TagStack, RReference>>
+{
+};
+
+template <class T>
+using decompose = decompose_<T, t_stack::type_stack<>>;
+
+template <class T>
+using decompose_t = typename decompose<T>::type;
 }
 }

@@ -9,6 +9,7 @@ struct type_stack
 {
 };
 
+
 // push type onto stack
 template <class TypeStack, class T>
 struct push;
@@ -21,6 +22,7 @@ struct push<type_stack<Ts...>, T>
 
 template <class TypeStack, class T>
 using push_t = typename push<TypeStack, T>::type;
+
 
 // access type on top of stack
 template <class TypeStack>
