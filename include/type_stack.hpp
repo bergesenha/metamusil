@@ -138,5 +138,19 @@ struct compose<type_stack<T, Tag, RestTags...>>
 
 template <class TypeStack>
 using compose_t = typename compose<TypeStack>::type;
+
+
+// create array of tags of modifiers/qualifiers
+template <class TypeStack>
+struct to_type_tag_array;
+
+template <class T, class... Tags>
+struct to_type_tag_array<type_stack<T, Tags...>>
+{
+    static constexpr const type_tag value[] = {Tags::value...};
+};
+
+template <class T, class... Tags>
+constexpr const type_tag to_type_tag_array<type_stack<T, Tags...>>::value[];
 }
 }
