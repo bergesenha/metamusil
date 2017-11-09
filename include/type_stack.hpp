@@ -31,22 +31,6 @@ typedef std::integral_constant<type_tag, type_tag::const_tag> Const;
 typedef std::integral_constant<type_tag, type_tag::lreference_tag> LReference;
 typedef std::integral_constant<type_tag, type_tag::rreference_tag> RReference;
 
-template <class TypeStack, class Tag>
-struct push_tag;
-
-template <class T, class... Tags, class Tag>
-struct push_tag<type_descriptor<T, Tags...>, Tag>
-{
-    typedef type_descriptor<T, Tag, Tags...> type;
-};
-
-template <class TypeStack, class Tag>
-using push_tag_t = typename push_tag<TypeStack, Tag>::type;
-
-
-// decompose a given type T into type_stack of the type and tags of modifiers
-// and qualifiers
-
 
 // apply a qualifier/modifier to type from a Tag
 template <class T, class Tag>
