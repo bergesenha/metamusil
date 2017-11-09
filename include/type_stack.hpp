@@ -23,6 +23,10 @@ enum class type_tag
     rreference_tag
 };
 
+typedef std::integral_constant<type_tag, type_tag::pointer_tag> Pointer;
+typedef std::integral_constant<type_tag, type_tag::const_tag> Const;
+typedef std::integral_constant<type_tag, type_tag::lreference_tag> LReference;
+typedef std::integral_constant<type_tag, type_tag::rreference_tag> RReference;
 
 template <class TypeStack, class Tag>
 struct push_tag;
