@@ -86,5 +86,38 @@ using decompose = decompose_<T, type_stack<T>>;
 
 template <class T>
 using decompose_t = typename decompose<T>::type;
+
+
+// apply a qualifier/modifier to type from a Tag
+template <class T, class Tag>
+struct apply;
+
+template <class T>
+struct apply<T, std::integral_constant<type_tag, type_tag::pointer_tag>>
+{
+    typedef T* type;
+};
+
+template <class T>
+struct apply<T, std::integral_constant<type_tag, type_tag::const_tag>>
+{
+    typedef const T type;
+};
+
+template <class T>
+struct apply<T, std::integral_constant<type_tag, type_tag::lreference_tag>>
+{
+    typedef T& type;
+};
+
+template <class T>
+struct apply<T, std::integral_constant<type_tag, type_tag::rreference_tag>>
+{
+    typedef T&& type;
+};
+
+template <class T, class Tag>
+using apply_t = typename apply<T, Tag>::type;
+
 }
 }
