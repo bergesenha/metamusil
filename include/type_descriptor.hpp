@@ -74,6 +74,13 @@ struct apply<T, Array>
     typedef T type[];
 };
 
+// general case means array
+template <class T, type_tag N>
+struct apply<T, std::integral_constant<type_tag, N>>
+{
+    typedef T type[N];
+};
+
 template <class T, class Tag>
 using apply_t = typename apply<T, Tag>::type;
 
