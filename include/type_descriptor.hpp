@@ -134,5 +134,30 @@ using decompose = decompose_<T, t_stack::type_stack<>>;
 
 template <class T>
 using decompose_t = typename decompose<T>::type;
+
+
+// create array of type_tags from a type_descriptor
+template <class TypeDescriptor>
+struct array_from_descriptor;
+
+template <class T, class... Tags>
+struct array_from_descriptor<type_descriptor<T, Tags...>>
+{
+    static constexpr const type_tag value[] = {Tags::value...};
+};
+
+template <class T, class... Tags>
+constexpr const type_tag
+    array_from_descriptor<type_descriptor<T, Tags...>>::value[];
+
+
+template <class T>
+struct array_from_descriptor<type_descriptor<T>>
+{
+    static constexpr const type_tag* value = nullptr;
+};
+
+template <class T>
+constexpr const type_tag* array_from_descriptor<type_descriptor<T>>::value;
 }
 }
