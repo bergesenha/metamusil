@@ -45,29 +45,30 @@ template <class T, class Tag>
 struct apply;
 
 template <class T>
-struct apply<T, std::integral_constant<type_tag, type_tag::pointer_tag>>
+struct apply<T, Pointer>
 {
     typedef T* type;
 };
 
 template <class T>
-struct apply<T, std::integral_constant<type_tag, type_tag::const_tag>>
+struct apply<T, Const>
 {
     typedef const T type;
 };
 
 template <class T>
-struct apply<T, std::integral_constant<type_tag, type_tag::lreference_tag>>
+struct apply<T, LReference>
 {
     typedef T& type;
 };
 
 template <class T>
-struct apply<T, std::integral_constant<type_tag, type_tag::rreference_tag>>
+struct apply<T, RReference>
 {
     typedef T&& type;
 };
 
+// array without size
 template <class T>
 struct apply<T, Array>
 {
