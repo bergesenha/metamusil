@@ -3,6 +3,7 @@
 #include <type_stack.hpp>
 
 #include <type_traits>
+#include <limits>
 
 
 namespace metamusil
@@ -19,18 +20,24 @@ struct type_descriptor
 
 
 // represents qualifiers/modifiers at run time
-enum class type_tag
+enum type_tag : std::size_t
 {
-    pointer_tag,
-    const_tag,
-    lreference_tag,
-    rreference_tag
+    pointer_tag =
+        std::numeric_limits<std::underlying_type_t<type_tag>>::max() - 4,
+    const_tag =
+        std::numeric_limits<std::underlying_type_t<type_tag>>::max() - 3,
+    lreference_tag =
+        std::numeric_limits<std::underlying_type_t<type_tag>>::max() - 2,
+    rreference_tag =
+        std::numeric_limits<std::underlying_type_t<type_tag>>::max() - 1,
+    array_tag = std::numeric_limits<std::underlying_type_t<type_tag>>::max(),
 };
 
 typedef std::integral_constant<type_tag, type_tag::pointer_tag> Pointer;
 typedef std::integral_constant<type_tag, type_tag::const_tag> Const;
 typedef std::integral_constant<type_tag, type_tag::lreference_tag> LReference;
 typedef std::integral_constant<type_tag, type_tag::rreference_tag> RReference;
+typedef std::integral_constant<type_tag, type_tag::array_tag> Array;
 
 
 // apply a qualifier/modifier to type from a Tag
@@ -38,27 +45,41 @@ template <class T, class Tag>
 struct apply;
 
 template <class T>
-struct apply<T, std::integral_constant<type_tag, type_tag::pointer_tag>>
+struct apply<T, Pointer>
 {
     typedef T* type;
 };
 
 template <class T>
-struct apply<T, std::integral_constant<type_tag, type_tag::const_tag>>
+struct apply<T, Const>
 {
     typedef const T type;
 };
 
 template <class T>
-struct apply<T, std::integral_constant<type_tag, type_tag::lreference_tag>>
+struct apply<T, LReference>
 {
     typedef T& type;
 };
 
 template <class T>
-struct apply<T, std::integral_constant<type_tag, type_tag::rreference_tag>>
+struct apply<T, RReference>
 {
     typedef T&& type;
+};
+
+// array without size
+template <class T>
+struct apply<T, Array>
+{
+    typedef T type[];
+};
+
+// general case means array
+template <class T, type_tag N>
+struct apply<T, std::integral_constant<type_tag, N>>
+{
+    typedef T type[N];
 };
 
 template <class T, class Tag>
@@ -66,7 +87,7 @@ using apply_t = typename apply<T, Tag>::type;
 
 
 // compose a type from a type_stack
-template <class TypeStack>
+template <class TypeDescriptor>
 struct compose;
 
 template <class T>
@@ -129,10 +150,62 @@ struct decompose_<T&&, TagStack>
 {
 };
 
+template <class T, class TagStack>
+struct decompose_<T[], TagStack>
+    : decompose_<T, t_stack::push_t<TagStack, Array>>
+{
+};
+
+template <class T, class TagStack, std::size_t N>
+struct decompose_<T[N], TagStack>
+    : decompose_<
+          T,
+          t_stack::push_t<
+              TagStack,
+              std::integral_constant<type_tag, static_cast<type_tag>(N)>>>
+{
+};
+
+template <class T, class TagStack, std::size_t N>
+struct decompose_<T const[N], TagStack>
+    : decompose_<
+          T,
+          t_stack::push_t<
+              t_stack::push_t<
+                  TagStack,
+                  std::integral_constant<type_tag, static_cast<type_tag>(N)>>,
+              Const>>
+{
+};
 template <class T>
 using decompose = decompose_<T, t_stack::type_stack<>>;
 
 template <class T>
 using decompose_t = typename decompose<T>::type;
+
+
+// create array of type_tags from a type_descriptor
+template <class TypeDescriptor>
+struct array_from_descriptor;
+
+template <class T, class... Tags>
+struct array_from_descriptor<type_descriptor<T, Tags...>>
+{
+    static constexpr const type_tag value[] = {Tags::value...};
+};
+
+template <class T, class... Tags>
+constexpr const type_tag
+    array_from_descriptor<type_descriptor<T, Tags...>>::value[];
+
+
+template <class T>
+struct array_from_descriptor<type_descriptor<T>>
+{
+    static constexpr const type_tag* value = nullptr;
+};
+
+template <class T>
+constexpr const type_tag* array_from_descriptor<type_descriptor<T>>::value;
 }
 }
