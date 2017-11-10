@@ -156,6 +156,16 @@ struct decompose_<T[], TagStack>
 {
 };
 
+template <class T, class TagStack, std::size_t N>
+struct decompose_<T[N], TagStack>
+    : decompose_<
+          T,
+          t_stack::push_t<
+              TagStack,
+              std::integral_constant<type_tag, static_cast<type_tag>(N)>>>
+{
+};
+
 template <class T>
 using decompose = decompose_<T, t_stack::type_stack<>>;
 
