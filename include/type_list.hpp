@@ -199,11 +199,11 @@ template <template <class> class TypeMetaFunction, class T>
 struct explicit_value_transform<type_list<>, TypeMetaFunction, T>
 {
     typedef T type;
-    static constexpr type* value = nullptr;
+    static constexpr const type* value = nullptr;
 };
 
 template <template <class> class TypeMetaFunction, class T>
-constexpr T* explicit_value_transform<type_list<>, TypeMetaFunction, T>::value;
+constexpr const T* explicit_value_transform<type_list<>, TypeMetaFunction, T>::value;
 
 ////////////////////////////////////////////////////////////////////////////////
 // returns length of a type_list
