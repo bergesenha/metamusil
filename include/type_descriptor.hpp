@@ -20,7 +20,7 @@ struct type_descriptor
 
 
 // represents qualifiers/modifiers at run time
-enum class type_tag : std::size_t
+enum type_tag : std::size_t
 {
     pointer_tag =
         std::numeric_limits<std::underlying_type_t<type_tag>>::max() - 4,
