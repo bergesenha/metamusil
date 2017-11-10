@@ -24,13 +24,15 @@ enum class type_tag
     pointer_tag,
     const_tag,
     lreference_tag,
-    rreference_tag
+    rreference_tag,
+    array_tag,
 };
 
 typedef std::integral_constant<type_tag, type_tag::pointer_tag> Pointer;
 typedef std::integral_constant<type_tag, type_tag::const_tag> Const;
 typedef std::integral_constant<type_tag, type_tag::lreference_tag> LReference;
 typedef std::integral_constant<type_tag, type_tag::rreference_tag> RReference;
+typedef std::integral_constant<type_tag, type_tag::array_tag> Array;
 
 
 // apply a qualifier/modifier to type from a Tag
@@ -59,6 +61,12 @@ template <class T>
 struct apply<T, std::integral_constant<type_tag, type_tag::rreference_tag>>
 {
     typedef T&& type;
+};
+
+template <class T>
+struct apply<T, Array>
+{
+    typedef T type[];
 };
 
 template <class T, class Tag>
@@ -126,6 +134,12 @@ struct decompose_<T&, TagStack>
 template <class T, class TagStack>
 struct decompose_<T&&, TagStack>
     : decompose_<T, t_stack::push_t<TagStack, RReference>>
+{
+};
+
+template <class T, class TagStack>
+struct decompose_<T[], TagStack>
+    : decompose_<T, t_stack::push_t<TagStack, Array>>
 {
 };
 
