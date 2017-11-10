@@ -3,6 +3,7 @@
 #include <type_stack.hpp>
 
 #include <type_traits>
+#include <limits>
 
 
 namespace metamusil
@@ -19,13 +20,17 @@ struct type_descriptor
 
 
 // represents qualifiers/modifiers at run time
-enum class type_tag
+enum class type_tag : std::size_t
 {
-    pointer_tag,
-    const_tag,
-    lreference_tag,
-    rreference_tag,
-    array_tag,
+    pointer_tag =
+        std::numeric_limits<std::underlying_type_t<type_tag>>::max() - 4,
+    const_tag =
+        std::numeric_limits<std::underlying_type_t<type_tag>>::max() - 3,
+    lreference_tag =
+        std::numeric_limits<std::underlying_type_t<type_tag>>::max() - 2,
+    rreference_tag =
+        std::numeric_limits<std::underlying_type_t<type_tag>>::max() - 1,
+    array_tag = std::numeric_limits<std::underlying_type_t<type_tag>>::max(),
 };
 
 typedef std::integral_constant<type_tag, type_tag::pointer_tag> Pointer;
