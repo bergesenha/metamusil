@@ -40,6 +40,7 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
     typedef decompose_t<int[]> arr_int_desc;
     typedef decompose_t<int[20]> arr_20_int_desc;
     typedef decompose_t<int(&)[20]> lref_arr_20_int_desc;
+    typedef decompose_t<int const[10]> arr_10_const_int_desc;
 
     constexpr auto int_check =
         std::is_same<int_desc, type_descriptor<int>>::value;
@@ -66,6 +67,13 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
             int,
             std::integral_constant<type_tag, static_cast<type_tag>(20)>,
             LReference>>::value;
+    constexpr auto arr_10_const_int_check = std::is_same<
+        arr_10_const_int_desc,
+        type_descriptor<
+            int,
+            Const,
+            std::integral_constant<type_tag, static_cast<type_tag>(10)>>>::
+        value;
 
 
     CHECK(int_check);
@@ -75,6 +83,7 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
     CHECK(arr_int_check);
     CHECK(arr_20_int_check);
     CHECK(lref_arr_20_int_check);
+    CHECK(arr_10_const_int_check);
 
     SECTION("generate arrays of type_tags from descriptors")
     {
