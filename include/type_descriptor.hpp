@@ -66,7 +66,7 @@ using apply_t = typename apply<T, Tag>::type;
 
 
 // compose a type from a type_stack
-template <class TypeStack>
+template <class TypeDescriptor>
 struct compose;
 
 template <class T>
