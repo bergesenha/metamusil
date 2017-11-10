@@ -17,7 +17,8 @@ TEST_CASE("apply type tags to types")
 
     constexpr auto is_ptr_int = std::is_same<ptr_int_type, int*>::value;
     constexpr auto is_arr_int = std::is_same<arr_int_type, int[]>::value;
-    constexpr auto is_arr_10_int = std::is_same<arr_10_int_type, int[10]>::value;
+    constexpr auto is_arr_10_int =
+        std::is_same<arr_10_int_type, int[10]>::value;
 
     CHECK(is_ptr_int);
     CHECK(is_arr_int);
@@ -37,6 +38,7 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
     typedef decompose_t<const int* const&> lref_const_ptr_const_int_desc;
 
     typedef decompose_t<int[]> arr_int_desc;
+    typedef decompose_t<int[20]> arr_20_int_desc;
 
     constexpr auto int_check =
         std::is_same<int_desc, type_descriptor<int>>::value;
@@ -51,6 +53,12 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
         type_descriptor<int, Const, Pointer, Const, LReference>>::value;
     constexpr auto arr_int_check =
         std::is_same<arr_int_desc, type_descriptor<int, Array>>::value;
+    constexpr auto arr_20_int_check = std::is_same<
+        arr_20_int_desc,
+        type_descriptor<
+            int,
+            std::integral_constant<type_tag, static_cast<type_tag>(20)>>>::
+        value;
 
 
     CHECK(int_check);
@@ -58,6 +66,7 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
     CHECK(lref_ptr_int_check);
     CHECK(lref_const_ptr_const_int_check);
     CHECK(arr_int_check);
+    CHECK(arr_20_int_check);
 
     SECTION("generate arrays of type_tags from descriptors")
     {
