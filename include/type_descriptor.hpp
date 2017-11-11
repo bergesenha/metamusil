@@ -1,6 +1,6 @@
 #pragma once
 
-#include <type_stack.hpp>
+#include <type_list.hpp>
 
 #include <type_traits>
 #include <limits>
@@ -111,7 +111,7 @@ template <class T, class TagStack>
 struct make_type_descriptor;
 
 template <class T, class... Ts>
-struct make_type_descriptor<T, t_stack::type_stack<Ts...>>
+struct make_type_descriptor<T, t_list::type_list<Ts...>>
 {
     typedef type_descriptor<T, Ts...> type;
 };
@@ -128,31 +128,31 @@ struct decompose_
 
 template <class T, class TagStack>
 struct decompose_<T*, TagStack>
-    : decompose_<T, t_stack::push_t<TagStack, Pointer>>
+    : decompose_<T, t_list::push_t<TagStack, Pointer>>
 {
 };
 
 template <class T, class TagStack>
 struct decompose_<const T, TagStack>
-    : decompose_<T, t_stack::push_t<TagStack, Const>>
+    : decompose_<T, t_list::push_t<TagStack, Const>>
 {
 };
 
 template <class T, class TagStack>
 struct decompose_<T&, TagStack>
-    : decompose_<T, t_stack::push_t<TagStack, LReference>>
+    : decompose_<T, t_list::push_t<TagStack, LReference>>
 {
 };
 
 template <class T, class TagStack>
 struct decompose_<T&&, TagStack>
-    : decompose_<T, t_stack::push_t<TagStack, RReference>>
+    : decompose_<T, t_list::push_t<TagStack, RReference>>
 {
 };
 
 template <class T, class TagStack>
 struct decompose_<T[], TagStack>
-    : decompose_<T, t_stack::push_t<TagStack, Array>>
+    : decompose_<T, t_list::push_t<TagStack, Array>>
 {
 };
 
@@ -160,7 +160,7 @@ template <class T, class TagStack, std::size_t N>
 struct decompose_<T[N], TagStack>
     : decompose_<
           T,
-          t_stack::push_t<
+          t_list::push_t<
               TagStack,
               std::integral_constant<type_tag, static_cast<type_tag>(N)>>>
 {
@@ -170,15 +170,15 @@ template <class T, class TagStack, std::size_t N>
 struct decompose_<T const[N], TagStack>
     : decompose_<
           T,
-          t_stack::push_t<
-              t_stack::push_t<
+          t_list::push_t<
+              t_list::push_t<
                   TagStack,
                   std::integral_constant<type_tag, static_cast<type_tag>(N)>>,
               Const>>
 {
 };
 template <class T>
-using decompose = decompose_<T, t_stack::type_stack<>>;
+using decompose = decompose_<T, t_list::type_list<>>;
 
 template <class T>
 using decompose_t = typename decompose<T>::type;
