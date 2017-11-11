@@ -93,6 +93,7 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
         typedef array_from_descriptor<arr_10_const_int_desc>
             arr_10_const_int_arr_holder;
 
+        auto i = array_from_descriptor_v<arr_10_const_int_desc>[0];
 
         CHECK(int_arr_holder::value == nullptr);
         REQUIRE(std::extent<decltype(ptr_const_int_arr_holder::value)>::value ==
@@ -103,6 +104,7 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
             std::extent<decltype(arr_10_const_int_arr_holder::value)>::value ==
             2);
         CHECK(arr_10_const_int_arr_holder::value[0] == type_tag::const_tag);
+        CHECK(i == type_tag::const_tag);
         CHECK(arr_10_const_int_arr_holder::value[1] == static_cast<type_tag>(10));
     }
 }

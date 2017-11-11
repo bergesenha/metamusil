@@ -207,5 +207,10 @@ struct array_from_descriptor<type_descriptor<T>>
 
 template <class T>
 constexpr const type_tag* array_from_descriptor<type_descriptor<T>>::value;
+
+
+template <class TypeDescriptor>
+constexpr auto array_from_descriptor_v =
+    array_from_descriptor<TypeDescriptor>::value;
 }
 }
