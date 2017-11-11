@@ -226,5 +226,20 @@ struct replace_base_type<type_descriptor<S, Tags...>, T>
 
 template <class TypeDescriptor, class T>
 using replace_base_type_t = typename replace_base_type<TypeDescriptor, T>::type;
+
+
+// remove all constness recursively of the type_descriptor
+template <class TypeDescriptor>
+struct remove_all_const;
+
+template <class T, class... Tags>
+struct remove_all_const<type_descriptor<T, Tags...>>
+{
+    typedef t_list::remove_t<t_list::type_list<Tags...>, Const> const_removed;
+    typedef make_type_descriptor_t<T, const_removed> type;
+};
+
+template <class TypeDescriptor>
+using remove_all_const_t = typename remove_all_const<TypeDescriptor>::type;
 }
 }

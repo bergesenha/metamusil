@@ -120,4 +120,16 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
 
         CHECK(ptr_const_double_check);
     }
+
+    SECTION("remove const from whole type")
+    {
+        typedef remove_all_const_t<lref_const_ptr_const_int_desc>
+            lref_ptr_int_desc2;
+
+        constexpr auto lref_ptr_int_check2 =
+            std::is_same<lref_ptr_int_desc2,
+                         type_descriptor<int, Pointer, LReference>>::value;
+
+        CHECK(lref_ptr_int_check2);
+    }
 }
