@@ -212,5 +212,19 @@ constexpr const type_tag* array_from_descriptor<type_descriptor<T>>::value;
 template <class TypeDescriptor>
 constexpr auto array_from_descriptor_v =
     array_from_descriptor<TypeDescriptor>::value;
+
+
+// replace the base type of TypeDescriptor with type T
+template <class TypeDescriptor, class T>
+struct replace_base_type;
+
+template <class S, class... Tags, class T>
+struct replace_base_type<type_descriptor<S, Tags...>, T>
+{
+    typedef type_descriptor<T, Tags...> type;
+};
+
+template <class TypeDescriptor, class T>
+using replace_base_type_t = typename replace_base_type<TypeDescriptor, T>::type;
 }
 }

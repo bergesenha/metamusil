@@ -105,6 +105,19 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
             2);
         CHECK(arr_10_const_int_arr_holder::value[0] == type_tag::const_tag);
         CHECK(i == type_tag::const_tag);
-        CHECK(arr_10_const_int_arr_holder::value[1] == static_cast<type_tag>(10));
+        CHECK(arr_10_const_int_arr_holder::value[1] ==
+              static_cast<type_tag>(10));
+    }
+
+    SECTION("replace base types")
+    {
+        typedef replace_base_type_t<ptr_const_int_desc, double>
+            ptr_const_double_desc;
+
+        constexpr auto ptr_const_double_check =
+            std::is_same<ptr_const_double_desc,
+                         type_descriptor<double, Const, Pointer>>::value;
+
+        CHECK(ptr_const_double_check);
     }
 }
