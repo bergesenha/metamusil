@@ -105,6 +105,63 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
             2);
         CHECK(arr_10_const_int_arr_holder::value[0] == type_tag::const_tag);
         CHECK(i == type_tag::const_tag);
-        CHECK(arr_10_const_int_arr_holder::value[1] == static_cast<type_tag>(10));
+        CHECK(arr_10_const_int_arr_holder::value[1] ==
+              static_cast<type_tag>(10));
+    }
+
+    SECTION("replace base types")
+    {
+        typedef replace_base_type_t<ptr_const_int_desc, double>
+            ptr_const_double_desc;
+
+        constexpr auto ptr_const_double_check =
+            std::is_same<ptr_const_double_desc,
+                         type_descriptor<double, Const, Pointer>>::value;
+
+        CHECK(ptr_const_double_check);
+    }
+
+    SECTION("remove const from whole type")
+    {
+        typedef remove_all_const_t<lref_const_ptr_const_int_desc>
+            lref_ptr_int_desc2;
+
+        constexpr auto lref_ptr_int_check2 =
+            std::is_same<lref_ptr_int_desc2,
+                         type_descriptor<int, Pointer, LReference>>::value;
+
+        CHECK(lref_ptr_int_check2);
+    }
+
+    SECTION("remove pointer modifiers from types")
+    {
+        typedef remove_all_pointers_t<lref_ptr_int_desc> lref_int_desc;
+        typedef remove_all_pointers_t<lref_const_ptr_const_int_desc>
+            lref_const_const_int_desc;
+
+        constexpr auto lref_int_check =
+            std::is_same<lref_int_desc,
+                         type_descriptor<int, LReference>>::value;
+
+        constexpr auto lref_const_const_int_check =
+            std::is_same<lref_const_const_int_desc,
+                         type_descriptor<int, Const, Const, LReference>>::value;
+
+        CHECK(lref_int_check);
+        CHECK(lref_const_const_int_check);
+
+        SECTION("recompose type_descriptor into type")
+        {
+            typedef compose_t<lref_int_desc> lref_int_type;
+            typedef compose_t<lref_const_const_int_desc> lref_const_int_type;
+
+            constexpr auto lref_int_type_check =
+                std::is_same<lref_int_type, int&>::value;
+            constexpr auto lref_const_int_type_check =
+                std::is_same<lref_const_int_type, const int&>::value;
+
+            CHECK(lref_int_type_check);
+            CHECK(lref_const_int_type_check);
+        }
     }
 }
