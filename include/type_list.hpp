@@ -494,5 +494,50 @@ struct any_of<type_list<>, UnaryPredicate> : std::false_type
 
 template <class TypeList, template <class> class UnaryPredicate>
 constexpr bool any_of_v = any_of<TypeList, UnaryPredicate>::value;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// stack-like operations on type_list
+
+// push type onto stack
+template <class TypeStack, class T>
+struct push;
+
+template <class... Ts, class T>
+struct push<type_list<Ts...>, T>
+{
+    typedef type_list<T, Ts...> type;
+};
+
+template <class TypeStack, class T>
+using push_t = typename push<TypeStack, T>::type;
+
+
+// access type on top of stack
+template <class TypeStack>
+struct top;
+
+template <class T, class... Ts>
+struct top<type_list<T, Ts...>>
+{
+    typedef T type;
+};
+
+template <class TypeStack>
+using top_t = typename top<TypeStack>::type;
+
+
+// pop type off top of stack
+template <class TypeStack>
+struct pop;
+
+template <class T, class... Ts>
+struct pop<type_list<T, Ts...>>
+{
+    typedef type_list<Ts...> type;
+};
+
+template <class TypeStack>
+using pop_t = typename pop<TypeStack>::type;
 }
 }
