@@ -241,5 +241,22 @@ struct remove_all_const<type_descriptor<T, Tags...>>
 
 template <class TypeDescriptor>
 using remove_all_const_t = typename remove_all_const<TypeDescriptor>::type;
+
+
+// remove all pointers recursively from whole type descriped by TypeDescriptor
+template <class TypeDescriptor>
+struct remove_all_pointers;
+
+template <class T, class... Tags>
+struct remove_all_pointers<type_descriptor<T, Tags...>>
+{
+    typedef t_list::remove_t<t_list::type_list<Tags...>, Pointer>
+        pointer_removed;
+    typedef make_type_descriptor_t<T, pointer_removed> type;
+};
+
+template <class TypeDescriptor>
+using remove_all_pointers_t =
+    typename remove_all_pointers<TypeDescriptor>::type;
 }
 }

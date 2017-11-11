@@ -132,4 +132,15 @@ TEST_CASE("decompose types to type_descriptors", "[type_descriptor]")
 
         CHECK(lref_ptr_int_check2);
     }
+
+    SECTION("remove pointer modifiers from types")
+    {
+        typedef remove_all_pointers_t<lref_ptr_int_desc> lref_int_desc;
+
+        constexpr auto lref_int_check =
+            std::is_same<lref_int_desc,
+                         type_descriptor<int, LReference>>::value;
+
+        CHECK(lref_int_check);
+    }
 }
