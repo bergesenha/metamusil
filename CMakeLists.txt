@@ -23,7 +23,6 @@ if(METAMUSIL_BUILD_TESTS)
         tests/test_sfinae.cpp
         tests/test_integer_sequence.cpp
         tests/test_misc.cpp
-        tests/test_type_stack.cpp
         tests/test_type_descriptor.cpp
         )
     add_executable(unit_tests ${METAMUSIL_TEST_SRC})
