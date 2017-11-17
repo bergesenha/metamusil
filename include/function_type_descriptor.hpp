@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include "type_list.hpp"
 
 
 namespace metamusil
@@ -8,6 +9,8 @@ namespace metamusil
 namespace ft_descriptor
 {
 
+
+////////////////////////////////////////////////////////////////////////////////
 // holds function type information at compile time
 template <class ReturnType, bool Constness, class... ParamTypes>
 struct function_type_descriptor
@@ -15,6 +18,58 @@ struct function_type_descriptor
 };
 
 
+
+////////////////////////////////////////////////////////////////////////////////
+// get return type of function_type_descriptor
+template <class FuncTypeDesc>
+struct return_type;
+
+template <class ReturnType, bool Constness, class... ParamTypes>
+struct return_type<
+    function_type_descriptor<ReturnType, Constness, ParamTypes...>>
+{
+    typedef ReturnType type;
+};
+
+template <class FuncTypeDesc>
+using return_type_t = typename return_type<FuncTypeDesc>::type;
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// get parameter types as type_list
+template <class FuncTypeDesc>
+struct parameter_types;
+
+
+template <class ReturnType, bool Constness, class... ParamTypes>
+struct parameter_types<
+    function_type_descriptor<ReturnType, Constness, ParamTypes...>>
+{
+    typedef t_list::type_list<ParamTypes...> type;
+};
+
+template <class FuncTypeDesc>
+using parameter_types_t = typename parameter_types<FuncTypeDesc>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// check if function type is const
+template <class FuncTypeDesc>
+struct is_const;
+
+
+template <class ReturnType, bool Constness, class... ParamTypes>
+struct is_const<function_type_descriptor<ReturnType, Constness, ParamTypes...>>
+{
+    static const bool value = Constness;
+};
+
+template <class FuncTypeDesc>
+constexpr bool is_const_v = is_const<FuncTypeDesc>::value;
+
+
+////////////////////////////////////////////////////////////////////////////////
 // compose a function type from a function_type_descriptor
 template <class FuncTypeDesc>
 struct compose;
@@ -34,6 +89,8 @@ struct compose<function_type_descriptor<ReturnType, true, ParamTypes...>>
 template <class FuncTypeDesc>
 using compose_t = typename compose<FuncTypeDesc>::type;
 
+
+////////////////////////////////////////////////////////////////////////////////
 // decompose a function type to a function_type_descriptor
 template <class FunctionType>
 struct decompose;
