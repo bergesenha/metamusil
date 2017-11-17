@@ -18,7 +18,6 @@ struct function_type_descriptor
 };
 
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // get return type of function_type_descriptor
 template <class FuncTypeDesc>
@@ -33,7 +32,6 @@ struct return_type<
 
 template <class FuncTypeDesc>
 using return_type_t = typename return_type<FuncTypeDesc>::type;
-
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +93,6 @@ using compose_t = typename compose<FuncTypeDesc>::type;
 template <class FunctionType>
 struct decompose;
 
-
 template <class ReturnType, class... ParamTypes>
 struct decompose<ReturnType(ParamTypes...)>
 {
@@ -106,6 +103,20 @@ template <class ReturnType, class... ParamTypes>
 struct decompose<ReturnType(ParamTypes...) const>
 {
     typedef function_type_descriptor<ReturnType, true, ParamTypes...> type;
+};
+
+// specialization for member function pointer type
+template <class FunType, class ObjectType>
+struct decompose<FunType ObjectType::*>
+{
+    typedef typename decompose<FunType>::type type;
+};
+
+// specialization for function pointer type
+template <class Fun>
+struct decompose<Fun*>
+{
+    typedef typename decompose<Fun>::type type;
 };
 
 template <class FunctionType>
