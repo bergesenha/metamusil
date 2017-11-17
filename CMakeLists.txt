@@ -24,6 +24,7 @@ if(METAMUSIL_BUILD_TESTS)
         tests/test_integer_sequence.cpp
         tests/test_misc.cpp
         tests/test_type_descriptor.cpp
+        tests/test_function_type_descriptor.cpp
         )
     add_executable(unit_tests ${METAMUSIL_TEST_SRC})
     target_include_directories(unit_tests
