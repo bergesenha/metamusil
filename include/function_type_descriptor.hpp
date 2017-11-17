@@ -113,6 +113,10 @@ struct compose_member_function_pointer<
     typedef ReturnType ObjectType::*type(ParamTypes...) const;
 };
 
+template <class FuncTypeDesc, class ObjectType>
+using compose_member_function_pointer_t =
+    typename compose_member_function_pointer<FuncTypeDesc, ObjectType>::type;
+
 ////////////////////////////////////////////////////////////////////////////////
 // decompose a function type to a function_type_descriptor
 template <class FunctionType>
